@@ -2,13 +2,13 @@
 
 ## Current Phase
 
-STEP 10.3 — v1.0.0 Tag & GitHub Release
+v1.0.0 Released / Project Closeout Complete
 
-STEP 10.3 has not started.
+`v1.0.0` was published on 2026-08-20.
 
 ## Current Goal
 
-Do not start STEP 10.3 until asked. STEP 10.2 is complete.
+No further STEPs. The first public version is released and closed out.
 
 ## Completed
 
@@ -42,9 +42,10 @@ Do not start STEP 10.3 until asked. STEP 10.2 is complete.
   - Completed. Release Candidate Status: **PASS**
 - STEP 10.2 — v1.0.0 Release Preparation
   - Completed.
-  - CHANGELOG prepared for `1.0.0 - 2026-08-20`.
-  - README project status no longer uses Pre-release / untagged wording.
-  - This file synchronized to the actual STEP.
+- STEP 10.3 — v1.0.0 Tag & GitHub Release
+  - Completed.
+- STEP 10.4 — Final Public Verification & Closeout
+  - Completed.
 
 ## In Progress
 
@@ -52,10 +53,23 @@ Do not start STEP 10.3 until asked. STEP 10.2 is complete.
 
 ## Not Started
 
-- STEP 10.3 — v1.0.0 Tag & GitHub Release
-- STEP 10.4 — Final Public Verification
+- None.
 
-No `v1.0.0` tag has been created. No GitHub Release has been published.
+## v1.0.0
+
+- Published: 2026-08-20
+- Annotated tag: `v1.0.0`
+- Tag message: `Skill Shelf Check v1.0.0`
+- Tag target commit: `6ee530f404bc64fd81e5d24c082cf3a1220e6921`
+- GitHub Release: https://github.com/Lucian1u/skill-shelf-check/releases/tag/v1.0.0
+- Release status: Published, Latest, not Draft, not Pre-release
+- Manual Release asset: `skill-shelf-check.html`
+- Asset size: 96629 bytes
+- Asset SHA-256: `2900908ccd948a023ad22c407edd75851a1cf9a3563ab25e97c0ae0b76650e83`
+- Public download of that asset passed the final `file://` smoke test
+- The existing `v1.0.0` tag and GitHub Release were not modified in STEP 10.4
+
+The `v1.0.0` tag still contains the pre-release snapshot of this file. This copy on `main` records that the release is complete.
 
 ## Acceptance testing
 
@@ -65,6 +79,7 @@ Final Acceptance: **PASS**
 - User manual `file://` smoke test: PASS
 - User confirmation: “这版没问题。”
 - STEP 10.1 release-candidate `file://` smoke test: PASS
+- STEP 10.4 public Release asset `file://` smoke test: PASS
 
 ## Known Issues
 
@@ -109,7 +124,7 @@ STEP 9 Git & GitHub publishing:
 
 - Local Git initialized. First commit: `9d6f1d2 Initial public release preparation`.
 - Public GitHub repository created and pushed.
-- Repository polish (description, topics, community files, issue forms) completed. No tag. No GitHub Release.
+- Repository polish (description, topics, community files, issue forms) completed.
 
 STEP 10.1 release candidate check:
 
@@ -121,4 +136,16 @@ STEP 10.1 release candidate check:
 STEP 10.2 release preparation:
 
 - CHANGELOG, README status, and this file updated for v1.0.0 preparation.
-- Tag and GitHub Release are not created in this STEP.
+
+STEP 10.3 tag and GitHub Release:
+
+- Annotated tag `v1.0.0` created on `6ee530f404bc64fd81e5d24c082cf3a1220e6921`.
+- GitHub Release published: https://github.com/Lucian1u/skill-shelf-check/releases/tag/v1.0.0
+- Manual asset `skill-shelf-check.html` uploaded (96629 bytes, SHA-256 `2900908ccd948a023ad22c407edd75851a1cf9a3563ab25e97c0ae0b76650e83`).
+
+STEP 10.4 final public verification:
+
+- Public Release asset downloaded independently of the working tree.
+- Size 96629 bytes; SHA-256 matches the tag HTML and the published asset digest.
+- `file://` smoke test of the downloaded copy: title `Skill Shelf Check`; folder picker and built-in demo present; demo 3 Skills / 2 issues (same name + broken local link); JSON export enabled; 0 console errors; 0 console warnings; no external runtime resource loads.
+- Existing `v1.0.0` tag and GitHub Release were not modified.
