@@ -2,13 +2,13 @@
 
 ## Current Phase
 
-v1.0.1 Release Ready
+v1.0.1 Released & Closed
 
 `v1.0.0` remains published and immutable. Public web entry: https://lucian1u.github.io/skill-shelf-check/
 
 ## Current Goal
 
-Publish the verified v1.0.1 patch release from the release-ready candidate while keeping v1.0.0 immutable.
+The verified v1.0.1 patch release is published and closed out while v1.0.0 remains immutable.
 
 ## Completed
 
@@ -65,17 +65,22 @@ Publish the verified v1.0.1 patch release from the release-ready candidate while
 - STEP 13 — Hosted/Offline Privacy Copy Consistency & Patch Release
   - STEP 13.1 — Privacy Copy Web/Offline Consistency Fix: **PASS**
   - STEP 13.2 — v1.0.1 Patch Release Preparation: **PASS**
-  - STEP 13.3 — Release Ready / Not Yet Published
+  - STEP 13.3 — v1.0.1 Finalize, Publish & Closeout: **PASS**
   - Product HTML privacy copy no longer claims the page itself makes no network requests.
   - Selected Skill files stay in the current browser tab, are not uploaded, and are not modified.
   - Old v1.0.0 product SHA-256: `2900908ccd948a023ad22c407edd75851a1cf9a3563ab25e97c0ae0b76650e83`
   - New candidate product SHA-256: `85d569dc889bb618d10185fa68a1a241289566f7a77568a1cce5aa575002f450`
   - `v1.0.0` tag and GitHub Release unchanged.
   - Pages URL unchanged: https://lucian1u.github.io/skill-shelf-check/
+  - Annotated tag `v1.0.1` points to `cacab3d923d984425f34e34c8fd35b395e7aec19`.
+  - GitHub Release published: https://github.com/Lucian1u/skill-shelf-check/releases/tag/v1.0.1
+  - Release asset `skill-shelf-check.html` uploaded from `v1.0.1` (96618 bytes, SHA-256 `85d569dc889bb618d10185fa68a1a241289566f7a77568a1cce5aa575002f450`).
+  - Independent Release asset download verified against the v1.0.1 tag content.
+  - `main` is clean and synchronized with `origin/main`.
 
 ## In Progress
 
-- STEP 13.3 — v1.0.1 Finalize, Publish & Closeout (Release Ready / Not Yet Published)
+- None.
 
 ## Not Started
 
@@ -102,7 +107,7 @@ The `v1.0.0` tag still contains the pre-release snapshot of this file. This copy
 Two official ways to use the product:
 
 1. Web: open https://lucian1u.github.io/skill-shelf-check/
-2. Offline: download `skill-shelf-check.html` from the v1.0.0 GitHub Release, or from this repository
+2. Offline: download `skill-shelf-check.html` from the v1.0.1 GitHub Release, or from this repository
 
 Product model:
 
@@ -206,3 +211,11 @@ STEP 12 public messaging:
 - Repository Description no longer reads as offline-only.
 - README first screen states online use first, with a clickable Pages URL; offline HTML remains documented.
 - Website / Pages URL, product HTML, `v1.0.0` tag, and GitHub Release were not changed.
+
+STEP 13.3 v1.0.1 release closeout:
+
+- Annotated tag `v1.0.1` and GitHub Release were published from the verified candidate.
+- Release asset `skill-shelf-check.html` was independently downloaded and matched SHA-256 `85d569dc889bb618d10185fa68a1a241289566f7a77568a1cce5aa575002f450`.
+- GitHub Pages is built, public, and HTTPS-enforced at https://lucian1u.github.io/skill-shelf-check/; the repository Website points to the same URL.
+- README retains the Pages URL as the primary entry and the single-file HTML as the offline entry.
+- The v1.0.0 tag and Release asset remain unchanged; the old asset SHA-256 is `2900908ccd948a023ad22c407edd75851a1cf9a3563ab25e97c0ae0b76650e83`.
