@@ -2,13 +2,13 @@
 
 ## Current Phase
 
-STEP 9 — Git & GitHub Publishing
+STEP 10.3 — v1.0.0 Tag & GitHub Release
 
-STEP 9 has not started.
+STEP 10.3 has not started.
 
 ## Current Goal
 
-Do not start STEP 9 until asked. STEP 8 is complete.
+Do not start STEP 10.3 until asked. STEP 10.2 is complete.
 
 ## Completed
 
@@ -31,9 +31,20 @@ Do not start STEP 9 until asked. STEP 8 is complete.
   - Completed and accepted.
 - STEP 8 — Open Source Repository Polish
   - Completed and verified.
-  - GitHub-facing README, MIT license, CONTRIBUTING, Code of Conduct, SECURITY, issue forms, and pull request template are in the repository.
-  - D010 records the MIT license decision.
-  - `skill-shelf-check.html` and `fixtures/**` were not modified.
+- STEP 9 — Git & GitHub Publishing
+  - Completed.
+  - STEP 9.1 — Local Git Preparation: Completed
+  - STEP 9.2 — Git Initialization: Completed
+  - STEP 9.3 — GitHub Repository Creation: Completed
+  - STEP 9.4 — GitHub Repository Polish: Completed
+  - Public repository: https://github.com/Lucian1u/skill-shelf-check
+- STEP 10.1 — Release Candidate Check
+  - Completed. Release Candidate Status: **PASS**
+- STEP 10.2 — v1.0.0 Release Preparation
+  - Completed.
+  - CHANGELOG prepared for `1.0.0 - 2026-08-20`.
+  - README project status no longer uses Pre-release / untagged wording.
+  - This file synchronized to the actual STEP.
 
 ## In Progress
 
@@ -41,8 +52,10 @@ Do not start STEP 9 until asked. STEP 8 is complete.
 
 ## Not Started
 
-- STEP 9 — Git & GitHub Publishing
-- STEP 10 — v1.0.0 Release
+- STEP 10.3 — v1.0.0 Tag & GitHub Release
+- STEP 10.4 — Final Public Verification
+
+No `v1.0.0` tag has been created. No GitHub Release has been published.
 
 ## Acceptance testing
 
@@ -51,8 +64,7 @@ Final Acceptance: **PASS**
 - Agent automated acceptance: PASS
 - User manual `file://` smoke test: PASS
 - User confirmation: “这版没问题。”
-
-Final Acceptance is unchanged by STEP 8.
+- STEP 10.1 release-candidate `file://` smoke test: PASS
 
 ## Known Issues
 
@@ -92,4 +104,21 @@ STEP 8 repository polish:
 - Protected SHA-256 of every file under `fixtures/` unchanged.
 - Issue form YAML parsed with Ruby Psych: `name` / `description` / `body` present, field IDs unique, `config.yml` has `blank_issues_enabled: false`.
 - README repository-relative links resolve to existing files.
-- No Git repository, no commit, no GitHub remote, no tag, no release.
+
+STEP 9 Git & GitHub publishing:
+
+- Local Git initialized. First commit: `9d6f1d2 Initial public release preparation`.
+- Public GitHub repository created and pushed.
+- Repository polish (description, topics, community files, issue forms) completed. No tag. No GitHub Release.
+
+STEP 10.1 release candidate check:
+
+- `main` clean and synced with `origin/main`.
+- `file://` smoke test: built-in demo 3 Skills / 2 issues; folder picker present; 0 console errors; no external resource loads.
+- HTML and fixtures checksums unchanged from STEP 8.
+- Release Candidate Status: PASS.
+
+STEP 10.2 release preparation:
+
+- CHANGELOG, README status, and this file updated for v1.0.0 preparation.
+- Tag and GitHub Release are not created in this STEP.

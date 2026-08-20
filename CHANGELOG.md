@@ -4,6 +4,8 @@ All notable changes to this project will be documented here.
 
 ## Unreleased
 
+## 1.0.0 - 2026-08-20
+
 ### Added
 
 - Initial project scaffold.

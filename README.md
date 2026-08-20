@@ -4,7 +4,7 @@
 
 分发产物是单个 HTML 文件：[`skill-shelf-check.html`](skill-shelf-check.html)。普通用户下载后可以直接双击打开，选择自己的 Skills 文件夹进行检查。不需要 Node、npm、命令行或本地服务器。
 
-**状态：** Pre-release。Final acceptance 已通过。`v1.0.0` 尚未打 tag。
+**状态：** Final Acceptance 已通过。当前代码覆盖首个稳定公开版本的范围。具体版本与历史以 [`CHANGELOG.md`](CHANGELOG.md) 和 GitHub Releases 为准。
 
 ---
 
@@ -162,11 +162,11 @@ Similar description 的计算是 token-set Jaccard，阈值是 `>= 0.80`。它�
 
 ## Project status
 
-- **Pre-release**
-- Final acceptance has passed
-- `v1.0.0` has not been tagged yet
+- Final Acceptance: **PASS**
+- 当前代码已经达到首个稳定公开版本的范围
+- 具体版本与历史以 [`CHANGELOG.md`](CHANGELOG.md) 和 GitHub Releases 为准
 
-当前状态见 [`docs/PROJECT_STATUS.md`](docs/PROJECT_STATUS.md)。
+开发进度见 [`docs/PROJECT_STATUS.md`](docs/PROJECT_STATUS.md)。
 
 ---
 
