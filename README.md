@@ -6,6 +6,20 @@
 
 **状态：** Final Acceptance 已通过。当前代码覆盖首个稳定公开版本的范围。具体版本与历史以 [`CHANGELOG.md`](CHANGELOG.md) 和 GitHub Releases 为准。
 
+## 直接在线使用
+
+不需要下载，也不需要安装。打开这个页面即可开始：
+
+**[打开 Skill Shelf Check](https://lucian1u.github.io/skill-shelf-check/)**
+
+1. 打开上面的链接
+2. 点击「选择 Skills 文件夹」
+3. 选择你电脑上的 Skills 文件夹，开始检查
+
+网页本身通过 HTTPS 加载。你选中的 Skill 文件只在当前浏览器里处理，不会上传到 GitHub 或其它地方。检查是只读的，工具不会修改你的文件。
+
+想完全离线使用时，仍然可以下载单个 HTML 文件，见下方 Quick Start。
+
 ---
 
 ## 项目定位
@@ -62,6 +76,10 @@ Similar description 不是 AI 语义相似。完整规则见 [`docs/DECISIONS.md
 ---
 
 ## Quick Start
+
+在线使用：打开 [Skill Shelf Check](https://lucian1u.github.io/skill-shelf-check/)，点击「选择 Skills 文件夹」。
+
+离线使用：
 
 1. 获取 [`skill-shelf-check.html`](skill-shelf-check.html)
 2. 双击打开
