@@ -2,13 +2,15 @@
 
 ## Current Phase
 
-v1.0.0 Released / Project Closeout Complete
+v1.0.0 Released / Zero-friction Web Access Complete
 
 `v1.0.0` was published on 2026-08-20.
 
+Public web entry: https://lucian1u.github.io/skill-shelf-check/
+
 ## Current Goal
 
-No further STEPs. The first public version is released and closed out.
+No further STEPs. The first public version is released, and zero-friction web access is complete.
 
 ## Completed
 
@@ -46,6 +48,15 @@ No further STEPs. The first public version is released and closed out.
   - Completed.
 - STEP 10.4 — Final Public Verification & Closeout
   - Completed.
+- STEP 11 — Zero-friction Web Access
+  - Completed.
+  - STEP 11.1 — HTTPS Compatibility Verification: **PASS**
+  - STEP 11.2 — Minimal Web Entry Implementation: **PASS**
+  - STEP 11.3 — Commit and Push Web Entry: **PASS**
+  - STEP 11.4 — Enable GitHub Pages and Public HTTPS Verification: **PASS**
+  - STEP 11.5 — Surface the Public Web Entry: **PASS**
+  - STEP 11.6 — Final Public Verification & Closeout: **PASS**
+  - Public entry: https://lucian1u.github.io/skill-shelf-check/
 
 ## In Progress
 
@@ -70,6 +81,22 @@ No further STEPs. The first public version is released and closed out.
 - The existing `v1.0.0` tag and GitHub Release were not modified in STEP 10.4
 
 The `v1.0.0` tag still contains the pre-release snapshot of this file. This copy on `main` records that the release is complete.
+
+## Public access
+
+Two official ways to use the product:
+
+1. Web: open https://lucian1u.github.io/skill-shelf-check/
+2. Offline: download `skill-shelf-check.html` from the v1.0.0 GitHub Release, or from this repository
+
+Product model:
+
+- The web page itself loads over HTTPS from GitHub Pages
+- User-selected Skill files are processed only in the current browser tab
+- Read-only
+- Skill contents are not uploaded
+
+STEP 11 did not change `skill-shelf-check.html`, the `v1.0.0` tag, or the v1.0.0 GitHub Release.
 
 ## Acceptance testing
 
@@ -149,3 +176,12 @@ STEP 10.4 final public verification:
 - Size 96629 bytes; SHA-256 matches the tag HTML and the published asset digest.
 - `file://` smoke test of the downloaded copy: title `Skill Shelf Check`; folder picker and built-in demo present; demo 3 Skills / 2 issues (same name + broken local link); JSON export enabled; 0 console errors; 0 console warnings; no external runtime resource loads.
 - Existing `v1.0.0` tag and GitHub Release were not modified.
+
+STEP 11 zero-friction web access:
+
+- STEP 11.1 HTTP static-server verification: PASS. Core workflow unchanged from `file://`; no Skill upload.
+- STEP 11.2 added thin `index.html` root entry to `./skill-shelf-check.html`.
+- STEP 11.3 committed and pushed that entry (`Add zero-friction web entry`).
+- STEP 11.4 enabled GitHub Pages from `main` / root. Public URL: https://lucian1u.github.io/skill-shelf-check/
+- STEP 11.5 surfaced the URL in README and repository Website.
+- STEP 11.6 final public verification: GitHub README and Website enter Pages; root URL opens the tool over HTTPS (`isSecureContext === true`); `fixtures/normal/` 2 Skills / 0 issues; `fixtures/conflict/` 3 Skills / 3 issues (`same-name`, `exact-duplicate`, `broken-local-link`); built-in demo 3 Skills / 2 issues; search, filters, JSON export work; after local fixture selection, 0 additional network requests, no POST / fetch / XHR / beacon / WebSocket, Skill contents not uploaded. Product JS errors: 0. Favicon 404 is a browser request to `https://lucian1u.github.io/favicon.ico`. Offline v1.0.0 Release asset retained. Product SHA-256 unchanged.
