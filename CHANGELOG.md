@@ -4,6 +4,8 @@ All notable changes to this project will be documented here.
 
 ## Unreleased
 
+## 1.0.1 - 2026-08-20
+
 ### Added
 
 - Added a zero-friction GitHub Pages web entry while retaining the single-file offline HTML distribution.

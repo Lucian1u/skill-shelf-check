@@ -2,13 +2,13 @@
 
 ## Current Phase
 
-v1.0.1 Patch Release Preparation
+v1.0.1 Release Ready
 
 `v1.0.0` remains published and immutable. Public web entry: https://lucian1u.github.io/skill-shelf-check/
 
 ## Current Goal
 
-Prepare a new v1.0.1 patch release to publish the verified privacy-copy fix. The existing v1.0.0 remains immutable.
+Publish the verified v1.0.1 patch release from the release-ready candidate while keeping v1.0.0 immutable.
 
 ## Completed
 
@@ -65,7 +65,7 @@ Prepare a new v1.0.1 patch release to publish the verified privacy-copy fix. The
 - STEP 13 — Hosted/Offline Privacy Copy Consistency & Patch Release
   - STEP 13.1 — Privacy Copy Web/Offline Consistency Fix: **PASS**
   - STEP 13.2 — v1.0.1 Patch Release Preparation: **PASS**
-  - STEP 13.3 — Not Started
+  - STEP 13.3 — Release Ready / Not Yet Published
   - Product HTML privacy copy no longer claims the page itself makes no network requests.
   - Selected Skill files stay in the current browser tab, are not uploaded, and are not modified.
   - Old v1.0.0 product SHA-256: `2900908ccd948a023ad22c407edd75851a1cf9a3563ab25e97c0ae0b76650e83`
@@ -75,11 +75,11 @@ Prepare a new v1.0.1 patch release to publish the verified privacy-copy fix. The
 
 ## In Progress
 
-- None.
+- STEP 13.3 — v1.0.1 Finalize, Publish & Closeout (Release Ready / Not Yet Published)
 
 ## Not Started
 
-- STEP 13.3 — v1.0.1 Tag & GitHub Release.
+- None.
 
 ## v1.0.0
 
