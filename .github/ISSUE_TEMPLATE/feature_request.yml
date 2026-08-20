@@ -1,0 +1,62 @@
+name: Feature request
+description: 提出一个功能想法。这是讨论，不代表会进入产品范围。
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Feature request 用来讨论，不代表一定实现，也不代表可以越过当前产品边界。
+
+        请先阅读 `docs/PRODUCT_SPEC.md` 和 `docs/DECISIONS.md`。
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem / use case
+      description: 你现在遇到什么问题？谁会用到这个能力？
+    validations:
+      required: true
+  - type: textarea
+    id: proposed
+    attributes:
+      label: Proposed behavior
+      description: 你希望产品具体怎样表现。请写可观察的行为，而不是实现方案口号。
+    validations:
+      required: true
+  - type: textarea
+    id: fit
+    attributes:
+      label: Why it fits Skill Shelf Check
+      description: 为什么这属于「本地、只读、可视化体检」，而不是另一个工具该做的事。
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives
+      description: 你已经试过或考虑过的其他做法。没有也可以写“无”。
+    validations:
+      required: true
+  - type: checkboxes
+    id: constraints
+    attributes:
+      label: Product constraints
+      description: 请确认这项建议是否仍然保持下列边界。若会打破某一条，请在方案里明确写出来。
+      options:
+        - label: 保持 fully offline
+        - label: 保持 local-first（文件仍只在当前页面处理）
+        - label: 保持 read-only（不自动修改用户 Skills）
+        - label: 保持 single-file HTML
+        - label: 保持 zero-install
+  - type: checkboxes
+    id: understanding
+    attributes:
+      label: Scope
+      options:
+        - label: 我理解这是讨论，不代表一定进入 scope。
+          required: true
+  - type: textarea
+    id: extra
+    attributes:
+      label: Extra context
+      description: 其他需要补充的内容。不要上传私人或敏感的 SKILL.md。
+    validations:
+      required: false

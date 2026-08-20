@@ -1,0 +1,98 @@
+name: Bug report
+description: 报告 Skill Shelf Check 的可复现问题。请不要上传私人或敏感的 SKILL.md。
+body:
+  - type: markdown
+    attributes:
+      value: |
+        请尽量提供能复现的信息。
+
+        **不要**为了报 bug 上传私人或敏感的 `SKILL.md` 内容。
+        如需复现，请提供最小化、脱敏后的示例目录说明。
+  - type: textarea
+    id: summary
+    attributes:
+      label: Issue summary
+      description: 用一两句话说明问题。
+      placeholder: 例如：选择 conflict fixture 后，失效链接没有出现在需复核清单中。
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Reproduction steps
+      description: 从打开 HTML 开始，逐步写清你做了什么。
+      placeholder: |
+        1. 双击打开 skill-shelf-check.html
+        2. 点击「选择 Skills 文件夹」
+        3. 选择某个目录
+        4. 观察到……
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+      description: 你认为应该发生什么。
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+      description: 实际发生了什么。
+    validations:
+      required: true
+  - type: input
+    id: os
+    attributes:
+      label: OS
+      description: 操作系统及版本。
+      placeholder: 例如 macOS 15.5
+    validations:
+      required: true
+  - type: input
+    id: browser
+    attributes:
+      label: Browser and version
+      description: 浏览器名称和版本。本项目尚未声称支持所有浏览器。
+      placeholder: 例如 Safari 18.5，或 Chromium 131
+    validations:
+      required: true
+  - type: dropdown
+    id: open-method
+    attributes:
+      label: How the HTML was opened
+      description: 这对复现本地文件选择很重要。
+      options:
+        - file://（双击 HTML 或从文件系统打开）
+        - 本地静态 HTTP
+        - 其他
+    validations:
+      required: true
+  - type: dropdown
+    id: source
+    attributes:
+      label: Input source
+      description: 这次用的是内置示例，还是真实 Skills 文件夹。
+      options:
+        - 内置示例（加载内置示例）
+        - 仓库 fixtures
+        - 真实 Skills 文件夹
+    validations:
+      required: true
+  - type: textarea
+    id: console
+    attributes:
+      label: Console error
+      description: 如果浏览器开发者工具里有报错，请贴原文。没有则写“无”。
+    validations:
+      required: false
+  - type: textarea
+    id: extra
+    attributes:
+      label: Screenshots / extra context
+      description: |
+        可附截图或其他必要说明。
+        不要粘贴完整的私人 Skill 正文。可以把图片拖进这个框。
+    validations:
+      required: false

@@ -1,0 +1,2857 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Skill Shelf Check</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --paper: #eef0f2;
+      --ink: #1c1f24;
+      --muted: #4d5560;
+      --line: #d4d7dd;
+      --surface: #ffffff;
+      --accent: #2f4668;
+      --accent-hover: #243654;
+      --review-ink: #6b4a2e;
+      --review-fill: #f3eee7;
+      --normal-ink: #2f4a40;
+      --normal-fill: #eef3f0;
+      --danger-ink: #6b2a2a;
+      --danger-fill: #f6e8e8;
+      --focus: #1c1f24;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+      line-height: 1.5;
+      color: var(--ink);
+      background: var(--paper);
+    }
+
+    main {
+      max-width: 46rem;
+      margin: 0 auto;
+      padding: 1.75rem 1rem 3.5rem;
+    }
+
+    h1 {
+      margin: 0 0 0.75rem;
+      padding-bottom: 0.65rem;
+      border-bottom: 2px solid var(--accent);
+      font-size: 1.7rem;
+      font-weight: 650;
+      letter-spacing: -0.02em;
+    }
+
+    h2 {
+      margin: 0 0 0.65rem;
+      font-size: 1.05rem;
+    }
+
+    h3 {
+      margin: 0;
+      font-size: 1rem;
+    }
+
+    .lede {
+      margin: 0 0 0.75rem;
+      color: var(--ink);
+    }
+
+    .checks {
+      margin: 0 0 1rem;
+      padding-left: 1.15rem;
+      color: var(--muted);
+    }
+
+    .checks li {
+      margin: 0.15rem 0;
+    }
+
+    .privacy {
+      margin: 0 0 1.15rem;
+      font-size: 0.95rem;
+      color: var(--ink);
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      margin: 0 0 1.25rem;
+    }
+
+    .btn {
+      appearance: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 2.5rem;
+      padding: 0.45rem 0.9rem;
+      border: 1px solid transparent;
+      border-radius: 6px;
+      font: inherit;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .btn.primary {
+      color: #fff;
+      background: var(--accent);
+    }
+
+    .btn.primary:hover {
+      background: var(--accent-hover);
+    }
+
+    .btn.secondary,
+    .btn.ghost {
+      color: var(--ink);
+      background: var(--surface);
+      border-color: var(--line);
+    }
+
+    .btn.secondary:hover,
+    .btn.ghost:hover {
+      border-color: var(--ink);
+    }
+
+    .btn:disabled {
+      cursor: not-allowed;
+      opacity: 0.55;
+    }
+
+    .btn:focus-visible,
+    input:focus-visible,
+    summary:focus-visible {
+      outline: 2px solid var(--focus);
+      outline-offset: 2px;
+    }
+
+    .folder-input-host[hidden] {
+      display: none;
+    }
+
+    .status {
+      margin: 0 0 1rem;
+      color: var(--muted);
+    }
+
+    .banner {
+      margin: 0 0 1rem;
+    }
+
+    .note,
+    .empty,
+    .error,
+    .quiet {
+      margin: 0 0 1rem;
+      padding: 0.75rem 0.85rem;
+      background: var(--surface);
+      border: 1px solid var(--line);
+    }
+
+    .error {
+      color: var(--danger-ink);
+      background: var(--danger-fill);
+      border-color: #e3c4c4;
+    }
+
+    .demo-mark {
+      display: inline-block;
+      margin: 0 0 1rem;
+      padding: 0.2rem 0.5rem;
+      color: var(--review-ink);
+      background: var(--review-fill);
+      border: 1px solid #e2d4c4;
+      font-size: 0.85rem;
+      font-weight: 650;
+    }
+
+    .summary {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.85rem 1.5rem;
+      margin: 0 0 1rem;
+      padding: 0.8rem 0.9rem;
+      background: var(--surface);
+      border: 1px solid var(--line);
+    }
+
+    .summary-item {
+      min-width: 6.5rem;
+    }
+
+    .summary-label {
+      display: block;
+      color: var(--muted);
+      font-size: 0.8rem;
+    }
+
+    .summary-value {
+      display: block;
+      margin-top: 0.15rem;
+      font-size: 1.25rem;
+      font-weight: 650;
+    }
+
+    .summary[hidden] {
+      display: none;
+    }
+
+    .skills-section[hidden] {
+      display: none;
+    }
+
+    .skills-controls {
+      display: grid;
+      gap: 0.85rem;
+      margin: 0 0 0.85rem;
+      padding: 0.85rem;
+      background: var(--surface);
+      border: 1px solid var(--line);
+    }
+
+    .search-feedback {
+      margin: 0.15rem 0 0.7rem;
+      color: var(--muted);
+    }
+
+    .search-feedback[hidden] {
+      display: none;
+    }
+
+    .export-row {
+      margin-top: 1rem;
+    }
+
+    .filters {
+      margin: 0;
+      padding: 0;
+      border: 0;
+    }
+
+    .filters legend {
+      padding: 0;
+      font-weight: 650;
+    }
+
+    .filter-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.45rem;
+      margin-top: 0.45rem;
+    }
+
+    .filter-row label {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      padding: 0.25rem 0.55rem;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .filter-row input:checked + span {
+      font-weight: 650;
+    }
+
+    .search-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.45rem;
+      align-items: center;
+    }
+
+    .search-row label {
+      font-weight: 650;
+    }
+
+    .search-row input[type="search"] {
+      flex: 1 1 12rem;
+      min-width: 0;
+      min-height: 2.35rem;
+      padding: 0.35rem 0.55rem;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      font: inherit;
+      background: #fff;
+    }
+
+    .panel {
+      margin: 0 0 1.35rem;
+    }
+
+    .skill-list,
+    .issue-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .skill-card,
+    .issue-card {
+      margin: 0 0 0.7rem;
+      padding: 0.85rem 0.9rem;
+      background: var(--surface);
+      border: 1px solid var(--line);
+    }
+
+    .card-head {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 0.45rem 0.8rem;
+      align-items: baseline;
+    }
+
+    .skill-desc,
+    .skill-path,
+    .skill-meta,
+    .parse-note,
+    .issue-why,
+    .issue-kv {
+      margin: 0.4rem 0 0;
+    }
+
+    .skill-desc {
+      overflow-wrap: anywhere;
+    }
+
+    .placeholder {
+      color: var(--muted);
+    }
+
+    .skill-path,
+    .issue-path,
+    .path-list,
+    .mono {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 0.85rem;
+      overflow-wrap: anywhere;
+      word-break: break-word;
+    }
+
+    .path-list {
+      margin: 0.35rem 0 0;
+      padding-left: 1.1rem;
+    }
+
+    .skill-meta,
+    .parse-note,
+    .issue-why,
+    .issue-kv {
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 0.1rem 0.45rem;
+      font-size: 0.8rem;
+      font-weight: 650;
+    }
+
+    .badge-review {
+      color: var(--review-ink);
+      background: var(--review-fill);
+    }
+
+    .badge-normal {
+      color: var(--normal-ink);
+      background: var(--normal-fill);
+    }
+
+    .type-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35rem;
+      margin: 0.5rem 0 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .type-list li {
+      padding: 0.1rem 0.45rem;
+      border: 1px solid var(--line);
+      font-size: 0.8rem;
+    }
+
+    .boundaries {
+      margin-top: 2rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--line);
+    }
+
+    .boundaries summary {
+      cursor: pointer;
+      font-weight: 650;
+    }
+
+    .boundaries ul {
+      margin: 0.5rem 0 0;
+      padding-left: 1.15rem;
+      color: var(--muted);
+    }
+
+    @media (max-width: 36rem) {
+      h1 {
+        font-size: 1.45rem;
+      }
+
+      .actions,
+      .search-row,
+      .filter-row {
+        width: 100%;
+      }
+
+      .btn {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <h1>Skill Shelf Check</h1>
+      <p class="lede">选择一个 Skills 文件夹，在当前页面本地查看：</p>
+      <ul class="checks">
+        <li>装了多少 Skill</li>
+        <li>哪些名称重复</li>
+        <li>哪些内容重复</li>
+        <li>哪些描述过于接近</li>
+        <li>哪些本地引用失效</li>
+      </ul>
+      <p class="privacy">文件仅在当前浏览器标签页内处理；本页没有网络请求，也不会修改所选目录。</p>
+      <p class="lede">点「选择 Skills 文件夹」扫描自己的目录；也可以先「加载内置示例」查看页面如何展示问题。</p>
+      <div class="actions">
+        <div class="folder-input-host" hidden>
+          <input id="folder-input" type="file" webkitdirectory directory multiple tabindex="-1">
+        </div>
+        <button type="button" id="pick-folder" class="btn primary">选择 Skills 文件夹</button>
+        <button type="button" id="load-demo" class="btn secondary">加载内置示例</button>
+      </div>
+    </header>
+
+    <p id="status" class="status" role="status">尚未选择文件夹。</p>
+    <div id="banner"></div>
+    <div id="summary" class="summary" hidden></div>
+    <section id="issues-panel" class="panel" aria-live="polite"></section>
+    <section id="skills-section" class="panel skills-section" hidden>
+      <h2>Skills</h2>
+      <div id="skills-controls" class="skills-controls">
+        <fieldset class="filters">
+          <legend>显示哪些 Skill</legend>
+          <div class="filter-row">
+            <label>
+              <input type="radio" name="skill-filter" value="all" checked>
+              <span>全部 <span id="count-all">0</span></span>
+            </label>
+            <label>
+              <input type="radio" name="skill-filter" value="review">
+              <span>需复核 <span id="count-review">0</span></span>
+            </label>
+            <label>
+              <input type="radio" name="skill-filter" value="normal">
+              <span>正常 <span id="count-normal">0</span></span>
+            </label>
+          </div>
+        </fieldset>
+        <div class="search-row">
+          <label for="search-input">搜索 Skill</label>
+          <input id="search-input" type="search" placeholder="名称、描述或路径">
+          <button type="button" id="search-clear" class="btn ghost">清空</button>
+        </div>
+      </div>
+      <p id="search-feedback" class="search-feedback" hidden></p>
+      <div id="skills-panel"></div>
+      <div class="export-row">
+        <button type="button" id="export-json" class="btn secondary" disabled>导出完整 JSON 报告</button>
+      </div>
+    </section>
+
+    <details class="boundaries">
+      <summary>边界</summary>
+      <p>这个工具只提供需要人工复核的信号。它不会：</p>
+      <ul>
+        <li>联网</li>
+        <li>上传文件</li>
+        <li>修改文件</li>
+        <li>删除 Skill</li>
+        <li>自动修复</li>
+        <li>读取 Agent 日志</li>
+        <li>判断内容事实是否过时</li>
+        <li>做安全扫描</li>
+        <li>承诺支持所有 Agent / Skill 语法</li>
+      </ul>
+    </details>
+  </main>
+
+  <script>
+    (function (global) {
+      "use strict";
+
+      var SKILL_FILE_NAME = "SKILL.md";
+      var BOM = "\ufeff";
+
+      function normalizePath(path) {
+        if (typeof path !== "string") return "";
+        return path
+          .replace(/\\/g, "/")
+          .replace(/\/+/g, "/")
+          .replace(/^\/+/, "")
+          .replace(/\/+$/, "");
+      }
+
+      function splitPath(path) {
+        var normalized = normalizePath(path);
+        if (!normalized) return [];
+        return normalized.split("/");
+      }
+
+      function basename(path) {
+        var parts = splitPath(path);
+        return parts.length ? parts[parts.length - 1] : "";
+      }
+
+      function dirname(path) {
+        var parts = splitPath(path);
+        if (parts.length <= 1) return "";
+        parts.pop();
+        return parts.join("/");
+      }
+
+      function isSkillFileName(name) {
+        return name === SKILL_FILE_NAME;
+      }
+
+      function getProvidedRelativePath(file) {
+        if (!file || typeof file !== "object") return "";
+        if (typeof file.webkitRelativePath === "string" && file.webkitRelativePath !== "") {
+          return normalizePath(file.webkitRelativePath);
+        }
+        if (typeof file.relativePath === "string" && file.relativePath !== "") {
+          return normalizePath(file.relativePath);
+        }
+        return "";
+      }
+
+      function inferSelectedRootName(relPaths) {
+        if (!relPaths.length) return "";
+        var first = splitPath(relPaths[0])[0] || "";
+        if (!first) return "";
+        var i;
+        for (i = 0; i < relPaths.length; i += 1) {
+          if (splitPath(relPaths[i])[0] !== first) return "";
+        }
+        return first;
+      }
+
+      function toScanRelativePath(relPath, rootName) {
+        var normalized = normalizePath(relPath);
+        if (!rootName) return normalized;
+        if (normalized === rootName) return "";
+        if (normalized.indexOf(rootName + "/") === 0) {
+          return normalized.slice(rootName.length + 1);
+        }
+        return normalized;
+      }
+
+      function isAncestorDir(skillRoot, fileDir) {
+        if (skillRoot === "") return true;
+        return fileDir === skillRoot || fileDir.indexOf(skillRoot + "/") === 0;
+      }
+
+      function findNearestSkillRoot(fileDir, skillRootsLongestFirst) {
+        var i;
+        for (i = 0; i < skillRootsLongestFirst.length; i += 1) {
+          if (isAncestorDir(skillRootsLongestFirst[i], fileDir)) {
+            return skillRootsLongestFirst[i];
+          }
+        }
+        return null;
+      }
+
+      function emptyParseFields() {
+        return {
+          rawText: null,
+          hasFrontMatter: false,
+          frontMatterValid: true,
+          name: null,
+          description: null,
+          namePresent: false,
+          descriptionPresent: false,
+          body: null,
+          readError: null
+        };
+      }
+
+      function assignParseFields(skill, fields) {
+        skill.rawText = fields.rawText;
+        skill.hasFrontMatter = fields.hasFrontMatter;
+        skill.frontMatterValid = fields.frontMatterValid;
+        skill.name = fields.name;
+        skill.description = fields.description;
+        skill.namePresent = fields.namePresent;
+        skill.descriptionPresent = fields.descriptionPresent;
+        skill.body = fields.body;
+        skill.readError = fields.readError;
+      }
+
+      function discoverFromFiles(fileList) {
+        var files = Array.prototype.slice.call(fileList || []);
+        var usable = [];
+        var skippedNoPath = [];
+        var i;
+        var file;
+        var provided;
+
+        for (i = 0; i < files.length; i += 1) {
+          file = files[i];
+          provided = getProvidedRelativePath(file);
+          if (!provided) {
+            skippedNoPath.push(file);
+            continue;
+          }
+          usable.push({
+            file: file,
+            providedPath: provided,
+            size: typeof file.size === "number" && isFinite(file.size) ? file.size : 0,
+            lastModified: typeof file.lastModified === "number" && isFinite(file.lastModified)
+              ? file.lastModified
+              : 0
+          });
+        }
+
+        var providedPaths = [];
+        for (i = 0; i < usable.length; i += 1) {
+          providedPaths.push(usable[i].providedPath);
+        }
+
+        var rootName = inferSelectedRootName(providedPaths);
+        for (i = 0; i < usable.length; i += 1) {
+          usable[i].scanPath = toScanRelativePath(usable[i].providedPath, rootName);
+        }
+
+        var skillRootSet = {};
+        var skillFileByRoot = {};
+        var root;
+        for (i = 0; i < usable.length; i += 1) {
+          if (!isSkillFileName(basename(usable[i].scanPath))) continue;
+          root = dirname(usable[i].scanPath);
+          skillRootSet[root] = true;
+          skillFileByRoot[root] = usable[i];
+        }
+
+        var skillRoots = [];
+        for (root in skillRootSet) {
+          if (Object.prototype.hasOwnProperty.call(skillRootSet, root)) {
+            skillRoots.push(root);
+          }
+        }
+        skillRoots.sort(function (a, b) {
+          if (b.length !== a.length) return b.length - a.length;
+          if (a < b) return -1;
+          if (a > b) return 1;
+          return 0;
+        });
+
+        var groups = {};
+        for (i = 0; i < skillRoots.length; i += 1) {
+          groups[skillRoots[i]] = [];
+        }
+
+        var owner;
+        for (i = 0; i < usable.length; i += 1) {
+          owner = findNearestSkillRoot(dirname(usable[i].scanPath), skillRoots);
+          if (owner === null) continue;
+          groups[owner].push(usable[i]);
+        }
+
+        var displayRoots = skillRoots.slice().sort(function (a, b) {
+          if (a < b) return -1;
+          if (a > b) return 1;
+          return 0;
+        });
+
+        var skills = [];
+        for (i = 0; i < displayRoots.length; i += 1) {
+          root = displayRoots[i];
+          var members = groups[root] || [];
+          var totalBytes = 0;
+          var latestModified = 0;
+          var outFiles = [];
+          var j;
+          var member;
+          for (j = 0; j < members.length; j += 1) {
+            member = members[j];
+            totalBytes += member.size;
+            if (member.lastModified > latestModified) {
+              latestModified = member.lastModified;
+            }
+            outFiles.push({
+              path: member.scanPath,
+              name: basename(member.scanPath),
+              size: member.size,
+              lastModified: member.lastModified
+            });
+          }
+          outFiles.sort(function (a, b) {
+            if (a.path < b.path) return -1;
+            if (a.path > b.path) return 1;
+            return 0;
+          });
+          var skill = {
+            path: root,
+            skillFile: skillFileByRoot[root] ? skillFileByRoot[root].file : null,
+            files: outFiles,
+            fileCount: outFiles.length,
+            totalBytes: totalBytes,
+            latestModified: latestModified
+          };
+          assignParseFields(skill, emptyParseFields());
+          skills.push(skill);
+        }
+
+        var scanFiles = [];
+        for (i = 0; i < usable.length; i += 1) {
+          scanFiles.push({
+            path: usable[i].scanPath,
+            size: usable[i].size,
+            lastModified: usable[i].lastModified
+          });
+        }
+
+        return {
+          rootName: rootName,
+          files: scanFiles,
+          skills: skills,
+          skippedCount: skippedNoPath.length
+        };
+      }
+
+      function lineBreakLength(text, index) {
+        if (text.charAt(index) === "\r" && text.charAt(index + 1) === "\n") return 2;
+        if (text.charAt(index) === "\n" || text.charAt(index) === "\r") return 1;
+        return 0;
+      }
+
+      function readLine(text, start) {
+        if (start >= text.length) {
+          return { line: "", next: start, done: true };
+        }
+        var i = start;
+        while (i < text.length && text.charAt(i) !== "\n" && text.charAt(i) !== "\r") {
+          i += 1;
+        }
+        var breakLen = lineBreakLength(text, i);
+        return {
+          line: text.slice(start, i),
+          next: breakLen === 0 ? text.length : i + breakLen,
+          done: false
+        };
+      }
+
+      function stripOneLeadingBreak(text) {
+        if (text.indexOf("\r\n") === 0) return text.slice(2);
+        if (text.charAt(0) === "\n" || text.charAt(0) === "\r") return text.slice(1);
+        return text;
+      }
+
+      function unquoteSimpleScalar(value) {
+        if (value.length < 2) return value;
+        var first = value.charAt(0);
+        var last = value.charAt(value.length - 1);
+        if ((first === '"' && last === '"') || (first === "'" && last === "'")) {
+          return value.slice(1, -1);
+        }
+        return value;
+      }
+
+      function parseFrontMatterLine(line, fields) {
+        var colon = line.indexOf(":");
+        if (colon === -1) return;
+        var key = line.slice(0, colon).replace(/^[ \t]+/, "").replace(/[ \t]+$/, "");
+        if (key !== "name" && key !== "description") return;
+        if (key === "name" && fields.namePresent) return;
+        if (key === "description" && fields.descriptionPresent) return;
+        var value = line.slice(colon + 1).replace(/^[ \t]+/, "").replace(/[ \t]+$/, "");
+        value = unquoteSimpleScalar(value);
+        if (key === "name") {
+          fields.name = value;
+          fields.namePresent = true;
+        } else {
+          fields.description = value;
+          fields.descriptionPresent = true;
+        }
+      }
+
+      function parseSkillMarkdown(text) {
+        var result = {
+          hasFrontMatter: false,
+          frontMatterValid: true,
+          name: null,
+          description: null,
+          namePresent: false,
+          descriptionPresent: false,
+          body: typeof text === "string" ? text : ""
+        };
+
+        if (typeof text !== "string") return result;
+
+        var source = text;
+        if (source.charAt(0) === BOM) source = source.slice(1);
+
+        var first = readLine(source, 0);
+        if (first.done || first.line !== "---") {
+          result.body = text;
+          return result;
+        }
+
+        var pos = first.next;
+        var closeAt = -1;
+        var closeNext = -1;
+        var safety = 0;
+        while (pos < source.length && safety < source.length + 2) {
+          safety += 1;
+          var rec = readLine(source, pos);
+          if (rec.done) break;
+          if (rec.line === "---") {
+            closeAt = pos;
+            closeNext = rec.next;
+            break;
+          }
+          pos = rec.next;
+        }
+
+        if (closeAt === -1) {
+          result.hasFrontMatter = false;
+          result.frontMatterValid = false;
+          result.body = text;
+          return result;
+        }
+
+        pos = first.next;
+        safety = 0;
+        while (pos < closeAt && safety < source.length + 2) {
+          safety += 1;
+          rec = readLine(source, pos);
+          if (rec.done || rec.next > closeAt && rec.line === "" && pos === closeAt) break;
+          if (pos >= closeAt) break;
+          parseFrontMatterLine(rec.line, result);
+          pos = rec.next;
+        }
+
+        result.hasFrontMatter = true;
+        result.frontMatterValid = true;
+        result.body = stripOneLeadingBreak(source.slice(closeNext));
+        return result;
+      }
+
+      function readSkillFileText(file) {
+        if (!file) {
+          return Promise.resolve({ ok: false, error: "Unable to read SKILL.md", text: null });
+        }
+        if (typeof file.text !== "function") {
+          return Promise.resolve({ ok: false, error: "Unable to read SKILL.md", text: null });
+        }
+        return Promise.resolve()
+          .then(function () {
+            return file.text();
+          })
+          .then(function (text) {
+            if (typeof text !== "string") {
+              return { ok: false, error: "Unable to read SKILL.md", text: null };
+            }
+            return { ok: true, error: null, text: text };
+          })
+          .catch(function () {
+            return { ok: false, error: "Unable to read SKILL.md", text: null };
+          });
+      }
+
+      function parseScanSkills(scan) {
+        var skills = scan && scan.skills ? scan.skills : [];
+        var tasks = skills.map(function (skill) {
+          return readSkillFileText(skill.skillFile).then(function (result) {
+            if (!result.ok) {
+              assignParseFields(skill, {
+                rawText: null,
+                hasFrontMatter: false,
+                frontMatterValid: true,
+                name: null,
+                description: null,
+                namePresent: false,
+                descriptionPresent: false,
+                body: null,
+                readError: result.error || "Unable to read SKILL.md"
+              });
+              return;
+            }
+            var parsed = parseSkillMarkdown(result.text);
+            assignParseFields(skill, {
+              rawText: result.text,
+              hasFrontMatter: parsed.hasFrontMatter,
+              frontMatterValid: parsed.frontMatterValid,
+              name: parsed.name,
+              description: parsed.description,
+              namePresent: parsed.namePresent,
+              descriptionPresent: parsed.descriptionPresent,
+              body: parsed.body,
+              readError: null
+            });
+          });
+        });
+        return Promise.all(tasks);
+      }
+
+      var SCHEME_RE = /^[A-Za-z][A-Za-z0-9+.-]*:/;
+
+      function pathCompare(a, b) {
+        if (a < b) return -1;
+        if (a > b) return 1;
+        return 0;
+      }
+
+      function sortPaths(paths) {
+        return paths.slice().sort(pathCompare);
+      }
+
+      function pairKey(a, b) {
+        return a < b ? a + "\0" + b : b + "\0" + a;
+      }
+
+      function isMissingContent(value) {
+        if (value === null || value === undefined) return true;
+        if (typeof value !== "string") return true;
+        return value.trim() === "";
+      }
+
+      function isSegmenterAvailable() {
+        return typeof Intl !== "undefined" && typeof Intl.Segmenter === "function";
+      }
+
+      function tokenSetFromList(tokens) {
+        var set = Object.create(null);
+        var size = 0;
+        var i;
+        var token;
+        for (i = 0; i < tokens.length; i += 1) {
+          token = tokens[i];
+          if (!token) continue;
+          if (set[token] !== true) {
+            set[token] = true;
+            size += 1;
+          }
+        }
+        return { set: set, size: size };
+      }
+
+      function jaccardSimilarity(setA, setB) {
+        if (!setA || !setB || setA.size === 0 || setB.size === 0) return null;
+        var inter = 0;
+        var key;
+        var smaller = setA.size <= setB.size ? setA : setB;
+        var larger = setA.size <= setB.size ? setB : setA;
+        for (key in smaller.set) {
+          if (Object.prototype.hasOwnProperty.call(smaller.set, key) && larger.set[key] === true) {
+            inter += 1;
+          }
+        }
+        var union = setA.size + setB.size - inter;
+        if (union === 0) return null;
+        return inter / union;
+      }
+
+      function tokenizeDescription(text) {
+        if (!isSegmenterAvailable()) return null;
+        if (typeof text !== "string") return { set: Object.create(null), size: 0 };
+        var copy = text.normalize("NFKC").toLowerCase();
+        var segmenter = new Intl.Segmenter("und", { granularity: "word" });
+        var set = Object.create(null);
+        var size = 0;
+        var iterator = segmenter.segment(copy)[Symbol.iterator]();
+        var step = iterator.next();
+        var seg;
+        var token;
+        while (!step.done) {
+          seg = step.value;
+          if (seg && seg.isWordLike) {
+            token = seg.segment;
+            if (token && set[token] !== true) {
+              set[token] = true;
+              size += 1;
+            }
+          }
+          step = iterator.next();
+        }
+        return { set: set, size: size };
+      }
+
+      function parseLinkDestination(raw) {
+        var s = String(raw).replace(/^[ \t]+/, "").replace(/[ \t]+$/, "");
+        if (!s) return "";
+        if (s.charAt(0) === "<") {
+          var end = s.indexOf(">");
+          if (end !== -1) s = s.slice(1, end);
+        } else {
+          var space = s.search(/[ \t]/);
+          if (space !== -1) s = s.slice(0, space);
+        }
+        return s;
+      }
+
+      function extractInlineMarkdownLinks(text) {
+        var links = [];
+        if (typeof text !== "string") return links;
+        var i = 0;
+        var open;
+        var close;
+        var destEnd;
+        var dest;
+        while (i < text.length) {
+          open = text.indexOf("[", i);
+          if (open === -1) break;
+          if (open > 0 && text.charAt(open - 1) === "!") {
+            i = open + 1;
+            continue;
+          }
+          close = text.indexOf("]", open + 1);
+          if (close === -1) break;
+          if (text.charAt(close + 1) !== "(") {
+            i = open + 1;
+            continue;
+          }
+          destEnd = text.indexOf(")", close + 2);
+          if (destEnd === -1) break;
+          dest = parseLinkDestination(text.slice(close + 2, destEnd));
+          if (dest) links.push(dest);
+          i = destEnd + 1;
+        }
+        return links;
+      }
+
+      function isNonLocalDestination(dest) {
+        if (!dest) return true;
+        if (dest.charAt(0) === "#") return true;
+        if (dest.charAt(0) === "/") return true;
+        if (dest.indexOf("//") === 0) return true;
+        if (SCHEME_RE.test(dest)) return true;
+        return false;
+      }
+
+      function stripFragmentAndQuery(dest) {
+        var s = dest;
+        var hash = s.indexOf("#");
+        if (hash !== -1) s = s.slice(0, hash);
+        var query = s.indexOf("?");
+        if (query !== -1) s = s.slice(0, query);
+        return s;
+      }
+
+      function safeDecodePath(path) {
+        try {
+          return decodeURIComponent(path);
+        } catch (err) {
+          return null;
+        }
+      }
+
+      function joinScanPath(baseDir, relative) {
+        var segs = [];
+        var up = 0;
+
+        function consume(str) {
+          if (!str) return;
+          var parts = String(str).replace(/\\/g, "/").split("/");
+          var i;
+          var part;
+          for (i = 0; i < parts.length; i += 1) {
+            part = parts[i];
+            if (part === "" || part === ".") continue;
+            if (part === "..") {
+              if (segs.length) segs.pop();
+              else up += 1;
+            } else {
+              segs.push(part);
+            }
+          }
+        }
+
+        consume(baseDir);
+        consume(relative);
+        var prefix = "";
+        var i;
+        for (i = 0; i < up; i += 1) prefix += "../";
+        var rest = segs.join("/");
+        return {
+          escaped: up > 0,
+          path: prefix + rest
+        };
+      }
+
+      function collectFilePathSet(scan) {
+        var set = Object.create(null);
+        var files = scan && scan.files ? scan.files : [];
+        var i;
+        for (i = 0; i < files.length; i += 1) {
+          if (files[i] && typeof files[i].path === "string") {
+            set[files[i].path] = true;
+          }
+        }
+        return set;
+      }
+
+      function collectMissingFieldIssues(skills) {
+        var issues = [];
+        var i;
+        var skill;
+        var fields;
+        for (i = 0; i < skills.length; i += 1) {
+          skill = skills[i];
+          if (skill.readError) continue;
+          fields = [];
+          if (isMissingContent(skill.name)) fields.push("name");
+          if (isMissingContent(skill.description)) fields.push("description");
+          if (!fields.length) continue;
+          issues.push({
+            type: "missing-field",
+            paths: [skill.path],
+            path: skill.path,
+            fields: fields
+          });
+        }
+        issues.sort(function (a, b) {
+          return pathCompare(a.path, b.path);
+        });
+        return issues;
+      }
+
+      function collectSameNameIssues(skills) {
+        var groups = Object.create(null);
+        var i;
+        var skill;
+        var name;
+        for (i = 0; i < skills.length; i += 1) {
+          skill = skills[i];
+          if (skill.readError) continue;
+          if (isMissingContent(skill.name)) continue;
+          name = skill.name;
+          if (!groups[name]) groups[name] = [];
+          groups[name].push(skill.path);
+        }
+        var issues = [];
+        var key;
+        var paths;
+        for (key in groups) {
+          if (!Object.prototype.hasOwnProperty.call(groups, key)) continue;
+          paths = sortPaths(groups[key]);
+          if (paths.length < 2) continue;
+          issues.push({
+            type: "same-name",
+            name: key,
+            paths: paths
+          });
+        }
+        issues.sort(function (a, b) {
+          var byName = pathCompare(a.name, b.name);
+          if (byName !== 0) return byName;
+          return pathCompare(a.paths[0], b.paths[0]);
+        });
+        return issues;
+      }
+
+      function collectExactDuplicateIssues(skills) {
+        var groups = [];
+        var indexByText = Object.create(null);
+        var i;
+        var skill;
+        var raw;
+        var idx;
+        for (i = 0; i < skills.length; i += 1) {
+          skill = skills[i];
+          if (skill.readError) continue;
+          if (typeof skill.rawText !== "string") continue;
+          raw = skill.rawText;
+          if (Object.prototype.hasOwnProperty.call(indexByText, raw)) {
+            idx = indexByText[raw];
+            groups[idx].push(skill.path);
+          } else {
+            indexByText[raw] = groups.length;
+            groups.push([skill.path]);
+          }
+        }
+        var issues = [];
+        var pairSet = Object.create(null);
+        var paths;
+        var a;
+        var b;
+        for (i = 0; i < groups.length; i += 1) {
+          paths = sortPaths(groups[i]);
+          if (paths.length < 2) continue;
+          issues.push({
+            type: "exact-duplicate",
+            paths: paths
+          });
+          for (a = 0; a < paths.length; a += 1) {
+            for (b = a + 1; b < paths.length; b += 1) {
+              pairSet[pairKey(paths[a], paths[b])] = true;
+            }
+          }
+        }
+        issues.sort(function (x, y) {
+          return pathCompare(x.paths[0], y.paths[0]);
+        });
+        return { issues: issues, duplicatePairs: pairSet };
+      }
+
+      function collectSimilarDescriptionIssues(skills, duplicatePairs, available) {
+        if (!available) return [];
+        var eligible = [];
+        var i;
+        var skill;
+        var tokens;
+        for (i = 0; i < skills.length; i += 1) {
+          skill = skills[i];
+          if (skill.readError) continue;
+          if (isMissingContent(skill.description)) continue;
+          tokens = tokenizeDescription(skill.description);
+          if (!tokens || tokens.size === 0) continue;
+          eligible.push({ path: skill.path, tokens: tokens });
+        }
+        var issues = [];
+        var j;
+        var similarity;
+        var paths;
+        for (i = 0; i < eligible.length; i += 1) {
+          for (j = i + 1; j < eligible.length; j += 1) {
+            if (duplicatePairs[pairKey(eligible[i].path, eligible[j].path)]) continue;
+            similarity = jaccardSimilarity(eligible[i].tokens, eligible[j].tokens);
+            if (similarity === null) continue;
+            if (similarity < 0.80) continue;
+            paths = sortPaths([eligible[i].path, eligible[j].path]);
+            issues.push({
+              type: "similar-description",
+              paths: paths,
+              similarity: similarity
+            });
+          }
+        }
+        issues.sort(function (a, b) {
+          var first = pathCompare(a.paths[0], b.paths[0]);
+          if (first !== 0) return first;
+          return pathCompare(a.paths[1], b.paths[1]);
+        });
+        return issues;
+      }
+
+      function collectBrokenLocalLinkIssues(skills, fileSet) {
+        var issues = [];
+        var i;
+        var skill;
+        var sourceText;
+        var links;
+        var j;
+        var original;
+        var filePart;
+        var decoded;
+        var joined;
+        var exists;
+        for (i = 0; i < skills.length; i += 1) {
+          skill = skills[i];
+          if (skill.readError) continue;
+          sourceText = typeof skill.rawText === "string" ? skill.rawText : "";
+          links = extractInlineMarkdownLinks(sourceText);
+          for (j = 0; j < links.length; j += 1) {
+            original = links[j];
+            if (isNonLocalDestination(original)) continue;
+            filePart = stripFragmentAndQuery(original);
+            if (!filePart) continue;
+            decoded = safeDecodePath(filePart);
+            if (decoded === null) {
+              issues.push({
+                type: "broken-local-link",
+                paths: [skill.path],
+                path: skill.path,
+                destination: original,
+                resolvedTarget: filePart
+              });
+              continue;
+            }
+            joined = joinScanPath(skill.path, decoded.replace(/\\/g, "/"));
+            exists = fileSet[joined.path] === true;
+            if (exists) continue;
+            issues.push({
+              type: "broken-local-link",
+              paths: [skill.path],
+              path: skill.path,
+              destination: original,
+              resolvedTarget: joined.path
+            });
+          }
+        }
+        issues.sort(function (a, b) {
+          var byPath = pathCompare(a.path, b.path);
+          if (byPath !== 0) return byPath;
+          return pathCompare(a.destination, b.destination);
+        });
+        return issues;
+      }
+
+      function emptyDiagnostics(available) {
+        return {
+          issues: [],
+          counts: {
+            issues: 0,
+            missingField: 0,
+            sameName: 0,
+            exactDuplicate: 0,
+            similarDescription: 0,
+            brokenLocalLink: 0
+          },
+          capabilities: {
+            similarDescriptionAvailable: available
+          }
+        };
+      }
+
+      function runDiagnostics(scan, options) {
+        var available = options && Object.prototype.hasOwnProperty.call(options, "similarDescriptionAvailable")
+          ? !!options.similarDescriptionAvailable
+          : isSegmenterAvailable();
+        var skills = scan && scan.skills ? scan.skills : [];
+        if (!skills.length) return emptyDiagnostics(available);
+
+        var fileSet = collectFilePathSet(scan);
+        var missing = collectMissingFieldIssues(skills);
+        var sameName = collectSameNameIssues(skills);
+        var exact = collectExactDuplicateIssues(skills);
+        var similar = collectSimilarDescriptionIssues(skills, exact.duplicatePairs, available);
+        var broken = collectBrokenLocalLinkIssues(skills, fileSet);
+        var issues = missing.concat(sameName, exact.issues, similar, broken);
+
+        return {
+          issues: issues,
+          counts: {
+            issues: issues.length,
+            missingField: missing.length,
+            sameName: sameName.length,
+            exactDuplicate: exact.issues.length,
+            similarDescription: similar.length,
+            brokenLocalLink: broken.length
+          },
+          capabilities: {
+            similarDescriptionAvailable: available
+          }
+        };
+      }
+
+      function mockFile(relativePath, size, lastModified, name) {
+        return {
+          name: name || basename(relativePath),
+          webkitRelativePath: relativePath,
+          size: size || 1,
+          lastModified: lastModified || 1
+        };
+      }
+
+      function same(actual, expected) {
+        return JSON.stringify(actual) === JSON.stringify(expected);
+      }
+
+      function skillSummary(scan) {
+        return scan.skills.map(function (skill) {
+          return {
+            path: skill.path,
+            fileCount: skill.fileCount,
+            files: skill.files.map(function (item) { return item.path; })
+          };
+        });
+      }
+
+      function runDiscoverySelfCheck() {
+        var failures = [];
+
+        function check(name, actual, expected) {
+          if (!same(actual, expected)) {
+            failures.push({ name: name, actual: actual, expected: expected });
+          }
+        }
+
+        var normal = discoverFromFiles([
+          mockFile("normal/summarize-notes/SKILL.md"),
+          mockFile("normal/summarize-notes/references/format.md"),
+          mockFile("normal/image-organizer/SKILL.md"),
+          mockFile("normal/image-organizer/references/naming.md")
+        ]);
+        check("discovery.normal.count", normal.skills.length, 2);
+        check("discovery.normal.summary", skillSummary(normal), [
+          {
+            path: "image-organizer",
+            fileCount: 2,
+            files: ["image-organizer/SKILL.md", "image-organizer/references/naming.md"]
+          },
+          {
+            path: "summarize-notes",
+            fileCount: 2,
+            files: ["summarize-notes/SKILL.md", "summarize-notes/references/format.md"]
+          }
+        ]);
+
+        var conflict = discoverFromFiles([
+          mockFile("conflict/duplicate-a/SKILL.md"),
+          mockFile("conflict/duplicate-b/SKILL.md"),
+          mockFile("conflict/broken-link/SKILL.md")
+        ]);
+        check("discovery.conflict.count", conflict.skills.length, 3);
+
+        var emptyScan = discoverFromFiles([
+          mockFile("empty/README.txt", 1, 1, "README.txt"),
+          mockFile("empty/misc/notes.txt", 1, 1, "notes.txt")
+        ]);
+        check("discovery.empty.count", emptyScan.skills.length, 0);
+
+        var nested = discoverFromFiles([
+          mockFile("shelf/parent/SKILL.md"),
+          mockFile("shelf/parent/notes.md"),
+          mockFile("shelf/parent/child/SKILL.md"),
+          mockFile("shelf/parent/child/reference.md")
+        ]);
+        check("discovery.nested.summary", skillSummary(nested), [
+          {
+            path: "parent",
+            fileCount: 2,
+            files: ["parent/SKILL.md", "parent/notes.md"]
+          },
+          {
+            path: "parent/child",
+            fileCount: 2,
+            files: ["parent/child/SKILL.md", "parent/child/reference.md"]
+          }
+        ]);
+
+        var rejected = discoverFromFiles([
+          mockFile("root/SKILL.MD"),
+          mockFile("root/skill.md"),
+          mockFile("root/MY_SKILL.md"),
+          mockFile("root/README.md"),
+          mockFile("root/SKILL.md.backup"),
+          mockFile("root/real/SKILL.md")
+        ]);
+        check("discovery.rejected.onlyExact", skillSummary(rejected), [
+          { path: "real", fileCount: 1, files: ["real/SKILL.md"] }
+        ]);
+
+        return {
+          pass: failures.length === 0,
+          failures: failures
+        };
+      }
+
+      function runParserSelfCheck() {
+        var failures = [];
+
+        function check(name, actual, expected) {
+          if (!same(actual, expected)) {
+            failures.push({ name: name, actual: actual, expected: expected });
+          }
+        }
+
+        var case1 = parseSkillMarkdown("---\nname: test\ndescription: A test skill.\n---\n");
+        check("parser.1.normal", {
+          hasFrontMatter: case1.hasFrontMatter,
+          frontMatterValid: case1.frontMatterValid,
+          name: case1.name,
+          description: case1.description,
+          namePresent: case1.namePresent,
+          descriptionPresent: case1.descriptionPresent
+        }, {
+          hasFrontMatter: true,
+          frontMatterValid: true,
+          name: "test",
+          description: "A test skill.",
+          namePresent: true,
+          descriptionPresent: true
+        });
+
+        var case2 = parseSkillMarkdown("---\nname: test\ndescription: Handles notes: summary and action items.\n---\n");
+        check("parser.2.colon", case2.description, "Handles notes: summary and action items.");
+
+        var case3a = parseSkillMarkdown("---\nname: \"summarize-notes\"\ndescription: \"A quoted skill.\"\n---\n");
+        var case3b = parseSkillMarkdown("---\nname: 'summarize-notes'\ndescription: 'A quoted skill.'\n---\n");
+        check("parser.3.double", { name: case3a.name, description: case3a.description }, {
+          name: "summarize-notes",
+          description: "A quoted skill."
+        });
+        check("parser.3.single", { name: case3b.name, description: case3b.description }, {
+          name: "summarize-notes",
+          description: "A quoted skill."
+        });
+
+        var case4Text = "# Example\n\nSome content.";
+        var case4 = parseSkillMarkdown(case4Text);
+        check("parser.4.noFrontMatter", {
+          hasFrontMatter: case4.hasFrontMatter,
+          name: case4.name,
+          description: case4.description,
+          body: case4.body
+        }, {
+          hasFrontMatter: false,
+          name: null,
+          description: null,
+          body: case4Text
+        });
+
+        var case5Text = "---\nname: test\ndescription: test\n# content\n";
+        var case5 = parseSkillMarkdown(case5Text);
+        check("parser.5.noClose", {
+          hasFrontMatter: case5.hasFrontMatter,
+          frontMatterValid: case5.frontMatterValid,
+          name: case5.name,
+          description: case5.description,
+          body: case5.body
+        }, {
+          hasFrontMatter: false,
+          frontMatterValid: false,
+          name: null,
+          description: null,
+          body: case5Text
+        });
+
+        var case6 = parseSkillMarkdown("---\nname:\ndescription: present\n---\n");
+        check("parser.6.emptyValue", {
+          name: case6.name,
+          namePresent: case6.namePresent,
+          description: case6.description,
+          descriptionPresent: case6.descriptionPresent
+        }, {
+          name: "",
+          namePresent: true,
+          description: "present",
+          descriptionPresent: true
+        });
+        check("parser.6.missingDescriptionVsEmpty", case6.descriptionPresent, true);
+        var case6b = parseSkillMarkdown("---\nname: only-name\n---\n");
+        check("parser.6.absentDescription", {
+          description: case6b.description,
+          descriptionPresent: case6b.descriptionPresent
+        }, {
+          description: null,
+          descriptionPresent: false
+        });
+
+        var case7 = parseSkillMarkdown("---\nname: summarize-notes\ndescription: Turns raw notes into a structured summary.\nauthor: Example\nversion: 1\n---\n");
+        check("parser.7.unknownFields", {
+          name: case7.name,
+          description: case7.description
+        }, {
+          name: "summarize-notes",
+          description: "Turns raw notes into a structured summary."
+        });
+
+        var case8 = parseSkillMarkdown("---\r\nname: test\r\ndescription: A test skill.\r\n---\r\n\r\nBody\r\n");
+        check("parser.8.crlf", {
+          hasFrontMatter: case8.hasFrontMatter,
+          name: case8.name,
+          description: case8.description,
+          body: case8.body
+        }, {
+          hasFrontMatter: true,
+          name: "test",
+          description: "A test skill.",
+          body: "Body\r\n"
+        });
+
+        var case9Raw = "\ufeff---\nname: test\ndescription: A test skill.\n---\n\nHello";
+        var case9Copy = case9Raw.slice(0);
+        var case9 = parseSkillMarkdown(case9Raw);
+        check("parser.9.rawUnchanged", case9Raw, case9Copy);
+        check("parser.9.bomIgnoredForParse", {
+          hasFrontMatter: case9.hasFrontMatter,
+          name: case9.name,
+          description: case9.description,
+          body: case9.body
+        }, {
+          hasFrontMatter: true,
+          name: "test",
+          description: "A test skill.",
+          body: "Hello"
+        });
+
+        var caseNameCase = parseSkillMarkdown("---\nName: Test\nDescription: Wrong\nname: ok\ndescription: kept\n---\n");
+        check("parser.strictKeyCase", {
+          name: caseNameCase.name,
+          description: caseNameCase.description
+        }, {
+          name: "ok",
+          description: "kept"
+        });
+
+        return {
+          pass: failures.length === 0,
+          failures: failures
+        };
+      }
+
+      function skillStub(path, markdown, extraFilePaths) {
+        var parsed = parseSkillMarkdown(markdown);
+        var paths = extraFilePaths || [path + "/SKILL.md"];
+        var files = [];
+        var i;
+        for (i = 0; i < paths.length; i += 1) {
+          files.push({
+            path: paths[i],
+            name: basename(paths[i]),
+            size: 1,
+            lastModified: 1
+          });
+        }
+        return {
+          path: path,
+          skillFile: null,
+          files: files,
+          fileCount: files.length,
+          totalBytes: 1,
+          latestModified: 1,
+          rawText: markdown,
+          hasFrontMatter: parsed.hasFrontMatter,
+          frontMatterValid: parsed.frontMatterValid,
+          name: parsed.name,
+          description: parsed.description,
+          namePresent: parsed.namePresent,
+          descriptionPresent: parsed.descriptionPresent,
+          body: parsed.body,
+          readError: null
+        };
+      }
+
+      function scanFromSkills(skills, extraFilePaths) {
+        var files = [];
+        var seen = Object.create(null);
+        var i;
+        var j;
+
+        function addPath(p) {
+          if (typeof p !== "string" || seen[p]) return;
+          seen[p] = true;
+          files.push({ path: p, size: 1, lastModified: 1 });
+        }
+
+        for (i = 0; i < skills.length; i += 1) {
+          addPath(skills[i].path + "/SKILL.md");
+          if (skills[i].files) {
+            for (j = 0; j < skills[i].files.length; j += 1) {
+              addPath(skills[i].files[j].path);
+            }
+          }
+        }
+        extraFilePaths = extraFilePaths || [];
+        for (i = 0; i < extraFilePaths.length; i += 1) addPath(extraFilePaths[i]);
+        return {
+          rootName: "root",
+          files: files,
+          skills: skills,
+          skippedCount: 0
+        };
+      }
+
+      function runDiagnosticsSelfCheck() {
+        var failures = [];
+
+        function check(name, actual, expected) {
+          if (!same(actual, expected)) {
+            failures.push({ name: name, actual: actual, expected: expected });
+          }
+        }
+
+        function typesOf(scan) {
+          return runDiagnostics(scan).issues.map(function (issue) { return issue.type; });
+        }
+
+        var missingName = runDiagnostics(scanFromSkills([
+          skillStub("missing-name", "---\ndescription: Test\n---\n")
+        ]));
+        check("diag.1.missingName", {
+          types: typesOf(scanFromSkills([skillStub("missing-name", "---\ndescription: Test\n---\n")])),
+          fields: missingName.issues[0] && missingName.issues[0].fields,
+          path: missingName.issues[0] && missingName.issues[0].path
+        }, {
+          types: ["missing-field"],
+          fields: ["name"],
+          path: "missing-name"
+        });
+
+        var missingDesc = runDiagnostics(scanFromSkills([
+          skillStub("missing-desc", "---\nname: only-name\n---\n")
+        ]));
+        check("diag.2.missingDescription", missingDesc.issues[0] && missingDesc.issues[0].fields, ["description"]);
+
+        var whitespaceDesc = runDiagnostics(scanFromSkills([
+          skillStub("ws", "---\nname: ws\ndescription: \"   \"\n---\n")
+        ]));
+        check("diag.3.whitespaceDescription", whitespaceDesc.issues[0] && whitespaceDesc.issues[0].fields, ["description"]);
+
+        var bothMissing = runDiagnostics(scanFromSkills([
+          skillStub("both", "---\n---\n")
+        ]));
+        check("diag.bothMissing", bothMissing.issues[0] && bothMissing.issues[0].fields, ["name", "description"]);
+
+        var emptyName = runDiagnostics(scanFromSkills([
+          skillStub("empty-name", "---\nname:\ndescription: Test\n---\n")
+        ]));
+        check("diag.emptyNameStillMissing", {
+          present: emptyName.issues.length === 1 && emptyName.issues[0].fields.indexOf("name") !== -1,
+          namePresent: scanFromSkills([skillStub("empty-name", "---\nname:\ndescription: Test\n---\n")]).skills[0].namePresent
+        }, { present: true, namePresent: true });
+
+        var sameTwo = runDiagnostics(scanFromSkills([
+          skillStub("b-skill", "---\nname: shared\ndescription: One unique body.\n---\nB\n"),
+          skillStub("a-skill", "---\nname: shared\ndescription: Another unique body.\n---\nA\n")
+        ]));
+        check("diag.4.sameNameGroup", {
+          count: sameTwo.counts.sameName,
+          type: sameTwo.issues[0] && sameTwo.issues[0].type,
+          name: sameTwo.issues[0] && sameTwo.issues[0].name,
+          paths: sameTwo.issues[0] && sameTwo.issues[0].paths
+        }, {
+          count: 1,
+          type: "same-name",
+          name: "shared",
+          paths: ["a-skill", "b-skill"]
+        });
+
+        var sameThree = runDiagnostics(scanFromSkills([
+          skillStub("c", "---\nname: trio\ndescription: C desc unique words here.\n---\nC\n"),
+          skillStub("a", "---\nname: trio\ndescription: A desc unique words here.\n---\nA\n"),
+          skillStub("b", "---\nname: trio\ndescription: B desc unique words here.\n---\nB\n")
+        ]));
+        check("diag.5.threeWaySameName", sameThree.issues.filter(function (issue) {
+          return issue.type === "same-name";
+        })[0].paths, ["a", "b", "c"]);
+
+        var dupText = "---\nname: note-cleaner\ndescription: Same text.\n---\nBody\n";
+        var exactTwo = runDiagnostics(scanFromSkills([
+          skillStub("duplicate-b", dupText),
+          skillStub("duplicate-a", dupText)
+        ]));
+        check("diag.6.exactDuplicate", {
+          types: exactTwo.issues.map(function (issue) { return issue.type; }),
+          paths: exactTwo.issues.filter(function (issue) { return issue.type === "exact-duplicate"; })[0].paths,
+          similar: exactTwo.counts.similarDescription
+        }, {
+          types: ["same-name", "exact-duplicate"],
+          paths: ["duplicate-a", "duplicate-b"],
+          similar: 0
+        });
+
+        var exactThree = runDiagnostics(scanFromSkills([
+          skillStub("z", dupText),
+          skillStub("x", dupText),
+          skillStub("y", dupText)
+        ]));
+        check("diag.7.threeWayExactDuplicate", exactThree.issues.filter(function (issue) {
+          return issue.type === "exact-duplicate";
+        })[0].paths, ["x", "y", "z"]);
+
+        var setA = tokenSetFromList(["a", "b", "c", "d"]);
+        var setB = tokenSetFromList(["a", "b", "c", "d"]);
+        check("diag.jaccard.identical", jaccardSimilarity(setA, setB), 1);
+        check("diag.jaccard.partial", jaccardSimilarity(
+          tokenSetFromList(["a", "b", "c", "d"]),
+          tokenSetFromList(["a", "b", "c", "e"])
+        ), 0.6);
+        check("diag.9.jaccardExactly80", jaccardSimilarity(
+          tokenSetFromList(["a", "b", "c", "d"]),
+          tokenSetFromList(["a", "b", "c", "d", "e"])
+        ), 0.8);
+        check("diag.10.jaccardBelow80", jaccardSimilarity(
+          tokenSetFromList(["a", "b", "c", "d"]),
+          tokenSetFromList(["a", "b", "c", "e"])
+        ) >= 0.80, false);
+
+        var similarOne = runDiagnostics(scanFromSkills([
+          skillStub("skill-a", "---\nname: alpha-one\ndescription: one two three four\n---\nRaw A\n"),
+          skillStub("skill-b", "---\nname: alpha-two\ndescription: one two three four\n---\nRaw B\n")
+        ]));
+        check("diag.8.similarOneDifferentRaw", {
+          types: similarOne.issues.map(function (issue) { return issue.type; }),
+          similarity: similarOne.issues[0] && similarOne.issues[0].similarity,
+          exact: similarOne.counts.exactDuplicate
+        }, {
+          types: ["similar-description"],
+          similarity: 1,
+          exact: 0
+        });
+
+        var similar80 = runDiagnostics(scanFromSkills([
+          skillStub("left", "---\nname: left\ndescription: one two three four\n---\nLeft raw\n"),
+          skillStub("right", "---\nname: right\ndescription: one two three four five\n---\nRight raw\n")
+        ]));
+        check("diag.9.similarExactly80", {
+          type: similar80.issues[0] && similar80.issues[0].type,
+          similarity: similar80.issues[0] && similar80.issues[0].similarity,
+          report: similar80.issues[0] && similar80.issues[0].similarity >= 0.80
+        }, {
+          type: "similar-description",
+          similarity: 0.8,
+          report: true
+        });
+
+        var similarLow = runDiagnostics(scanFromSkills([
+          skillStub("left", "---\nname: left\ndescription: one two three four\n---\nLeft raw\n"),
+          skillStub("right", "---\nname: right\ndescription: one two three zebra\n---\nRight raw\n")
+        ]));
+        check("diag.10.similarBelow80", similarLow.counts.similarDescription, 0);
+
+        check("diag.11.exactSuppressesSimilar", exactTwo.counts.similarDescription, 0);
+        check("diag.11.sameNameStillReported", exactTwo.counts.sameName, 1);
+
+        var nfkcA = tokenizeDescription("\ufb01le notes");
+        var nfkcB = tokenizeDescription("file notes");
+        check("diag.nfkc", nfkcA && nfkcB ? jaccardSimilarity(nfkcA, nfkcB) : null, 1);
+        var caseA = tokenizeDescription("Notes Summary");
+        var caseB = tokenizeDescription("notes summary");
+        check("diag.caseInsensitive", caseA && caseB ? jaccardSimilarity(caseA, caseB) : null, 1);
+
+        var emptyTokens = jaccardSimilarity(tokenSetFromList([]), tokenSetFromList(["a"]));
+        check("diag.21.emptySetNoNaN", emptyTokens === null, true);
+
+        var existing = runDiagnostics(scanFromSkills([
+          skillStub("ok", "---\nname: ok\ndescription: Has a real local file link.\n---\nSee [Reference](references/file.md).\n", [
+            "ok/SKILL.md",
+            "ok/references/file.md"
+          ])
+        ], ["ok/references/file.md"]));
+        check("diag.12.existingLocalLink", existing.counts.brokenLocalLink, 0);
+
+        var missingLink = runDiagnostics(scanFromSkills([
+          skillStub("broken-link", "---\nname: broken-link\ndescription: Opens a missing file.\n---\nSee [Missing](references/missing.md).\n")
+        ]));
+        check("diag.13.missingLocalLink", {
+          type: missingLink.issues[0] && missingLink.issues[0].type,
+          destination: missingLink.issues[0] && missingLink.issues[0].destination,
+          resolvedTarget: missingLink.issues[0] && missingLink.issues[0].resolvedTarget,
+          path: missingLink.issues[0] && missingLink.issues[0].path
+        }, {
+          type: "broken-local-link",
+          destination: "references/missing.md",
+          resolvedTarget: "broken-link/references/missing.md",
+          path: "broken-link"
+        });
+
+        var fragment = runDiagnostics(scanFromSkills([
+          skillStub("ok", "---\nname: ok\ndescription: Fragment link.\n---\nSee [Reference](references/file.md#usage).\n", [
+            "ok/SKILL.md",
+            "ok/references/file.md"
+          ])
+        ], ["ok/references/file.md"]));
+        check("diag.14.fragmentStripped", fragment.counts.brokenLocalLink, 0);
+
+        var query = runDiagnostics(scanFromSkills([
+          skillStub("ok", "---\nname: ok\ndescription: Query link.\n---\nSee [Reference](references/file.md?raw=1#usage).\n", [
+            "ok/SKILL.md",
+            "ok/references/file.md"
+          ])
+        ], ["ok/references/file.md"]));
+        check("diag.15.queryStripped", query.counts.brokenLocalLink, 0);
+
+        var dot = runDiagnostics(scanFromSkills([
+          skillStub("ok", "---\nname: ok\ndescription: Dot path.\n---\nSee [Reference](./references/file.md).\n", [
+            "ok/SKILL.md",
+            "ok/references/file.md"
+          ])
+        ], ["ok/references/file.md"]));
+        check("diag.16.dotNormalization", dot.counts.brokenLocalLink, 0);
+
+        var up = runDiagnostics(scanFromSkills([
+          skillStub("pack", "---\nname: nested\ndescription: Parent path.\n---\nSee [Shared](../shared/a.md).\n")
+        ], ["shared/a.md"]));
+        check("diag.17.parentNormalization", {
+          broken: up.counts.brokenLocalLink,
+          resolved: up.issues.length ? up.issues[0].resolvedTarget : "shared/a.md"
+        }, { broken: 0, resolved: "shared/a.md" });
+
+        var external = runDiagnostics(scanFromSkills([
+          skillStub("ext", "---\nname: ext\ndescription: External links only.\n---\n[A](https://example.com) [B](http://example.com) [C](mailto:test@example.com) [D](ftp://example.com) [E](customscheme:foo) [F](//example.com/file) [G](#section) [H](/absolute/path)\n")
+        ]));
+        check("diag.18.externalIgnored", external.counts.brokenLocalLink, 0);
+        check("diag.19.anchorIgnored", external.counts.brokenLocalLink, 0);
+
+        var image = runDiagnostics(scanFromSkills([
+          skillStub("img", "---\nname: img\ndescription: Image not a link.\n---\n![Image](assets/missing.png)\n")
+        ]));
+        check("diag.imageNotLink", image.counts.brokenLocalLink, 0);
+
+        var malformed = null;
+        var malformedCrashed = false;
+        try {
+          malformed = runDiagnostics(scanFromSkills([
+            skillStub("bad", "---\nname: bad\ndescription: Bad percent.\n---\n[X](references/%zz.md)\n")
+          ]));
+        } catch (err) {
+          malformedCrashed = true;
+        }
+        check("diag.20.malformedNoCrash", {
+          crashed: malformedCrashed,
+          hasIssue: malformed && malformed.counts.brokenLocalLink === 1
+        }, { crashed: false, hasIssue: true });
+
+        var unavailable = runDiagnostics(scanFromSkills([
+          skillStub("a", "---\nname: shared\ndescription: one two three four\n---\nA\n"),
+          skillStub("b", "---\nname: shared\ndescription: one two three four\n---\nB\n")
+        ]), { similarDescriptionAvailable: false });
+        check("diag.22.segmenterUnavailable", {
+          similarAvailable: unavailable.capabilities.similarDescriptionAvailable,
+          similarCount: unavailable.counts.similarDescription,
+          sameName: unavailable.counts.sameName
+        }, {
+          similarAvailable: false,
+          similarCount: 0,
+          sameName: 1
+        });
+
+        var orderScan = scanFromSkills([
+          skillStub("dup-b", dupText),
+          skillStub("dup-a", dupText),
+          skillStub("broken-link", "---\nname: broken-link\ndescription: Opens a missing file.\n---\nSee [Missing](references/missing.md).\n"),
+          skillStub("missing-name", "---\ndescription: Test\n---\n")
+        ]);
+        var firstOrder = runDiagnostics(orderScan).issues.map(function (issue) { return issue.type; });
+        var secondOrder = runDiagnostics(orderScan).issues.map(function (issue) { return issue.type; });
+        check("diag.23.deterministicOrder", firstOrder, secondOrder);
+        check("diag.23.typeSequence", firstOrder, [
+          "missing-field",
+          "same-name",
+          "exact-duplicate",
+          "broken-local-link"
+        ]);
+
+        return {
+          pass: failures.length === 0,
+          failures: failures
+        };
+      }
+
+      function issueTypeLabel(type) {
+        if (type === "missing-field") return "缺少必要字段";
+        if (type === "same-name") return "同名";
+        if (type === "exact-duplicate") return "全文重复";
+        if (type === "similar-description") return "描述近似";
+        if (type === "broken-local-link") return "失效本地链接";
+        return type;
+      }
+
+      function issueInvolvesPath(issue, skillPath) {
+        var i;
+        if (!issue) return false;
+        if (issue.type === "broken-local-link" || issue.type === "missing-field") {
+          if (issue.path === skillPath) return true;
+        }
+        if (!issue.paths) return false;
+        for (i = 0; i < issue.paths.length; i += 1) {
+          if (issue.paths[i] === skillPath) return true;
+        }
+        return false;
+      }
+
+      function collectReviewPathSet(issues) {
+        var set = Object.create(null);
+        var i;
+        var j;
+        var issue;
+        var paths;
+        issues = issues || [];
+        for (i = 0; i < issues.length; i += 1) {
+          issue = issues[i];
+          paths = [];
+          if (issue.type === "broken-local-link" || issue.type === "missing-field") {
+            if (typeof issue.path === "string") paths.push(issue.path);
+            else if (issue.paths && issue.paths.length) paths = issue.paths.slice();
+          } else if (issue.paths) {
+            paths = issue.paths.slice();
+          }
+          for (j = 0; j < paths.length; j += 1) {
+            if (typeof paths[j] === "string") set[paths[j]] = true;
+          }
+        }
+        return set;
+      }
+
+      function skillIssueTypes(skillPath, issues) {
+        var types = [];
+        var seen = Object.create(null);
+        var i;
+        var issue;
+        issues = issues || [];
+        for (i = 0; i < issues.length; i += 1) {
+          issue = issues[i];
+          if (!issueInvolvesPath(issue, skillPath)) continue;
+          if (seen[issue.type]) continue;
+          seen[issue.type] = true;
+          types.push(issue.type);
+        }
+        return types;
+      }
+
+      function summarizeScan(scan) {
+        var skills = scan && scan.skills ? scan.skills : [];
+        var diagnostics = scan && scan.diagnostics
+          ? scan.diagnostics
+          : emptyDiagnostics(isSegmenterAvailable());
+        var reviewSet = collectReviewPathSet(diagnostics.issues);
+        var review = 0;
+        var i;
+        for (i = 0; i < skills.length; i += 1) {
+          if (reviewSet[skills[i].path]) review += 1;
+        }
+        return {
+          skillCount: skills.length,
+          issueCount: diagnostics.issues.length,
+          reviewSkillCount: review,
+          normalSkillCount: skills.length - review,
+          reviewSet: reviewSet,
+          diagnostics: diagnostics
+        };
+      }
+
+      function skillMatchesSearch(skill, query) {
+        if (!query) return true;
+        var q = String(query).toLocaleLowerCase();
+        var name = skill && skill.name != null ? String(skill.name) : "";
+        var desc = skill && skill.description != null ? String(skill.description) : "";
+        var path = skill && skill.path != null ? String(skill.path) : "";
+        return name.toLocaleLowerCase().indexOf(q) !== -1
+          || desc.toLocaleLowerCase().indexOf(q) !== -1
+          || path.toLocaleLowerCase().indexOf(q) !== -1;
+      }
+
+      function filterSkills(skills, reviewSet, filter, query) {
+        var out = [];
+        var i;
+        var skill;
+        var isReview;
+        skills = skills || [];
+        reviewSet = reviewSet || Object.create(null);
+        filter = filter || "all";
+        for (i = 0; i < skills.length; i += 1) {
+          skill = skills[i];
+          isReview = reviewSet[skill.path] === true;
+          if (filter === "review" && !isReview) continue;
+          if (filter === "normal" && isReview) continue;
+          if (!skillMatchesSearch(skill, query)) continue;
+          out.push(skill);
+        }
+        return out;
+      }
+
+      function projectIssue(issue) {
+        var out = {
+          type: issue.type,
+          paths: issue.paths ? issue.paths.slice() : []
+        };
+        if (issue.type === "missing-field") {
+          out.path = issue.path;
+          out.fields = issue.fields ? issue.fields.slice() : [];
+        } else if (issue.type === "same-name") {
+          out.name = issue.name;
+        } else if (issue.type === "similar-description") {
+          out.similarity = issue.similarity;
+        } else if (issue.type === "broken-local-link") {
+          out.path = issue.path;
+          out.destination = issue.destination;
+          out.resolvedTarget = issue.resolvedTarget;
+        }
+        return out;
+      }
+
+      function buildExportReport(scan, sourceType) {
+        if (!scan || !scan.skills || scan.skills.length === 0) return null;
+        var summary = summarizeScan(scan);
+        var skills = [];
+        var issues = [];
+        var i;
+        var skill;
+        for (i = 0; i < scan.skills.length; i += 1) {
+          skill = scan.skills[i];
+          skills.push({
+            path: skill.path,
+            name: skill.name,
+            description: skill.description,
+            fileCount: skill.fileCount,
+            totalBytes: skill.totalBytes,
+            latestModified: skill.latestModified,
+            status: summary.reviewSet[skill.path] ? "review" : "normal"
+          });
+        }
+        for (i = 0; i < summary.diagnostics.issues.length; i += 1) {
+          issues.push(projectIssue(summary.diagnostics.issues[i]));
+        }
+        return {
+          schemaVersion: 1,
+          source: {
+            type: sourceType === "built-in-demo" ? "built-in-demo" : "local-directory",
+            rootName: sourceType === "built-in-demo" ? null : (scan.rootName || "")
+          },
+          summary: {
+            skillCount: summary.skillCount,
+            reviewSkillCount: summary.reviewSkillCount,
+            normalSkillCount: summary.normalSkillCount,
+            issueCount: summary.issueCount
+          },
+          capabilities: {
+            similarDescriptionAvailable: !!(summary.diagnostics.capabilities
+              && summary.diagnostics.capabilities.similarDescriptionAvailable)
+          },
+          skills: skills,
+          issues: issues
+        };
+      }
+
+      function reportJsonText(report) {
+        return JSON.stringify(report, null, 2);
+      }
+
+      function createExportBlob(report) {
+        return new Blob([reportJsonText(report)], { type: "application/json" });
+      }
+
+      var DEMO_NOTE_A =
+        "---\nname: note-cleaner\ndescription: Cleans leftover headings from a draft note.\n---\n\nUse this skill when a draft still has leftover headings.\n";
+      var DEMO_NOTE_B =
+        "---\nname: note-cleaner\ndescription: Tidies repeated lines in a personal notebook.\n---\n\nUse this skill when repeated lines should be removed.\n";
+      var DEMO_PLANNER =
+        "---\nname: weekly-planner\ndescription: Turns a week of tasks into a simple written plan.\n---\n\nSee the template in [Missing](references/missing.md).\n";
+      var DEMO_MODIFIED = 1711929600000;
+
+      function byteSize(text) {
+        if (typeof Blob === "function") return new Blob([text]).size;
+        return String(text).length;
+      }
+
+      function makeMemoryFile(relativePath, content, lastModified) {
+        return {
+          name: basename(relativePath),
+          webkitRelativePath: relativePath,
+          size: byteSize(content),
+          lastModified: lastModified || 1,
+          text: function () {
+            return Promise.resolve(content);
+          }
+        };
+      }
+
+      function builtInDemoFiles() {
+        return [
+          makeMemoryFile("demo/note-cleaner-a/SKILL.md", DEMO_NOTE_A, DEMO_MODIFIED),
+          makeMemoryFile("demo/note-cleaner-b/SKILL.md", DEMO_NOTE_B, DEMO_MODIFIED),
+          makeMemoryFile("demo/weekly-planner/SKILL.md", DEMO_PLANNER, DEMO_MODIFIED)
+        ];
+      }
+
+      function resetViewControls(viewState) {
+        viewState.filter = "all";
+        viewState.search = "";
+      }
+
+      function setLoadedScan(viewState, scan, sourceType) {
+        resetViewControls(viewState);
+        viewState.sourceType = sourceType;
+        viewState.scan = scan;
+        viewState.errorMessage = null;
+        if (!scan || !scan.skills || scan.skills.length === 0) {
+          viewState.phase = "empty";
+        } else {
+          viewState.phase = "results";
+        }
+        return viewState;
+      }
+
+      function createUiView() {
+        return {
+          phase: "idle",
+          sourceType: null,
+          scan: null,
+          filter: "all",
+          search: "",
+          errorMessage: null
+        };
+      }
+
+      function runUiSelfCheck() {
+        var failures = [];
+
+        function check(name, actual, expected) {
+          if (!same(actual, expected)) {
+            failures.push({ name: name, actual: actual, expected: expected });
+          }
+        }
+
+        var dupText = "---\nname: note-cleaner\ndescription: Same text.\n---\nBody\n";
+        var conflictScan = scanFromSkills([
+          skillStub("duplicate-b", dupText),
+          skillStub("duplicate-a", dupText),
+          skillStub("broken-link", "---\nname: broken-link\ndescription: Opens a missing file.\n---\nSee [Missing](references/missing.md).\n")
+        ]);
+        conflictScan.rootName = "conflict";
+        conflictScan.diagnostics = runDiagnostics(conflictScan);
+        var conflictSummary = summarizeScan(conflictScan);
+
+        check("ui.1.reviewMapping", {
+          a: conflictSummary.reviewSet["duplicate-a"] === true,
+          b: conflictSummary.reviewSet["duplicate-b"] === true,
+          c: conflictSummary.reviewSet["broken-link"] === true
+        }, { a: true, b: true, c: true });
+        check("ui.2.reviewSkillCount", conflictSummary.reviewSkillCount, 3);
+        check("ui.3.normalSkillCount", conflictSummary.normalSkillCount, 0);
+        check("ui.4.sumEqualsSkillCount",
+          conflictSummary.reviewSkillCount + conflictSummary.normalSkillCount,
+          conflictSummary.skillCount
+        );
+
+        var normalScan = scanFromSkills([
+          skillStub("image-organizer", "---\nname: image-organizer\ndescription: Groups photo files by capture date and subject folder names.\n---\nSee [Reference](references/naming.md).\n", [
+            "image-organizer/SKILL.md",
+            "image-organizer/references/naming.md"
+          ]),
+          skillStub("summarize-notes", "---\nname: summarize-notes\ndescription: Turns raw meeting notes into a concise structured summary.\n---\nSee [Reference](references/format.md).\n", [
+            "summarize-notes/SKILL.md",
+            "summarize-notes/references/format.md"
+          ])
+        ], [
+          "image-organizer/references/naming.md",
+          "summarize-notes/references/format.md"
+        ]);
+        normalScan.rootName = "normal";
+        normalScan.diagnostics = runDiagnostics(normalScan);
+        var normalSummary = summarizeScan(normalScan);
+
+        check("ui.5.filterAll", filterSkills(conflictScan.skills, conflictSummary.reviewSet, "all", "").length, 3);
+        check("ui.6.filterReview", filterSkills(conflictScan.skills, conflictSummary.reviewSet, "review", "").length, 3);
+        check("ui.7.filterNormal", filterSkills(conflictScan.skills, conflictSummary.reviewSet, "normal", "").length, 0);
+        check("ui.7b.normalAllNormal", filterSkills(normalScan.skills, normalSummary.reviewSet, "normal", "").length, 2);
+        check("ui.7c.normalReviewEmpty", filterSkills(normalScan.skills, normalSummary.reviewSet, "review", "").length, 0);
+
+        check("ui.8.searchName", filterSkills(normalScan.skills, normalSummary.reviewSet, "all", "summarize-notes").map(function (skill) {
+          return skill.path;
+        }), ["summarize-notes"]);
+        check("ui.9.searchDescription", filterSkills(normalScan.skills, normalSummary.reviewSet, "all", "photo files").map(function (skill) {
+          return skill.path;
+        }), ["image-organizer"]);
+        check("ui.10.searchPath", filterSkills(conflictScan.skills, conflictSummary.reviewSet, "all", "broken-link").map(function (skill) {
+          return skill.path;
+        }), ["broken-link"]);
+        check("ui.11.searchCaseInsensitive", filterSkills(normalScan.skills, normalSummary.reviewSet, "all", "SUMMARIZE-NOTES").map(function (skill) {
+          return skill.path;
+        }), ["summarize-notes"]);
+
+        var mixed = scanFromSkills([
+          skillStub("note-keep", "---\nname: keep\ndescription: Unique keep description words.\n---\nA\n"),
+          skillStub("note-a", dupText),
+          skillStub("note-b", dupText)
+        ]);
+        mixed.diagnostics = runDiagnostics(mixed);
+        var mixedSummary = summarizeScan(mixed);
+        check("ui.12.filterSearchIntersection", filterSkills(mixed.skills, mixedSummary.reviewSet, "review", "note-a").map(function (skill) {
+          return skill.path;
+        }), ["note-a"]);
+        check("ui.13.zeroSearchResults", filterSkills(normalScan.skills, normalSummary.reviewSet, "all", "zzzz-no-match").length, 0);
+
+        var report = buildExportReport(conflictScan, "local-directory");
+        var json = reportJsonText(report);
+        check("ui.14.excludesRawText", json.indexOf("rawText") === -1, true);
+        check("ui.15.excludesBody", /"body"\s*:/.test(json), false);
+        check("ui.16.excludesFile", json.indexOf("skillFile") === -1, true);
+        check("ui.17.noAbsolutePathField", json.indexOf("absolutePath") === -1 && json.indexOf("/Users/") === -1, true);
+
+        var emptyScan = scanFromSkills([]);
+        emptyScan.diagnostics = runDiagnostics(emptyScan);
+        check("ui.18.emptyExportUnavailable", buildExportReport(emptyScan, "local-directory"), null);
+
+        var demoReport = buildExportReport(conflictScan, "built-in-demo");
+        check("ui.19.demoSource", demoReport && demoReport.source, {
+          type: "built-in-demo",
+          rootName: null
+        });
+        check("ui.20.realSource", report && report.source, {
+          type: "local-directory",
+          rootName: "conflict"
+        });
+
+        var viewState = createUiView();
+        setLoadedScan(viewState, conflictScan, "built-in-demo");
+        viewState.filter = "review";
+        viewState.search = "note";
+        setLoadedScan(viewState, normalScan, "local-directory");
+        check("ui.21.demoToReal", {
+          sourceType: viewState.sourceType,
+          replaced: viewState.scan === normalScan,
+          filter: viewState.filter,
+          search: viewState.search
+        }, {
+          sourceType: "local-directory",
+          replaced: true,
+          filter: "all",
+          search: ""
+        });
+        viewState.filter = "normal";
+        viewState.search = "x";
+        setLoadedScan(viewState, conflictScan, "built-in-demo");
+        check("ui.22.realToDemo", {
+          sourceType: viewState.sourceType,
+          replaced: viewState.scan === conflictScan
+        }, {
+          sourceType: "built-in-demo",
+          replaced: true
+        });
+        check("ui.23.newSourceResetsFilterSearch", {
+          filter: viewState.filter,
+          search: viewState.search
+        }, {
+          filter: "all",
+          search: ""
+        });
+
+        mixed.diagnostics = runDiagnostics(mixed, { similarDescriptionAvailable: false });
+        var capReport = buildExportReport(mixed, "local-directory");
+        check("ui.24.similarityUnavailableInExport",
+          capReport && capReport.capabilities.similarDescriptionAvailable,
+          false
+        );
+
+        check("ui.25.issueCountIsIssuesLength", {
+          summary: conflictSummary.issueCount,
+          exportCount: report.summary.issueCount,
+          similar: conflictScan.diagnostics.counts.similarDescription
+        }, {
+          summary: conflictScan.diagnostics.issues.length,
+          exportCount: conflictScan.diagnostics.issues.length,
+          similar: 0
+        });
+        check("ui.json.schemaVersion", report.schemaVersion, 1);
+
+        var filteredOne = filterSkills(conflictScan.skills, conflictSummary.reviewSet, "all", "broken-link");
+        var exportAfterSearch = buildExportReport(conflictScan, "local-directory");
+        check("ui.26.searchDoesNotShrinkExport", {
+          visible: filteredOne.length,
+          skillCount: exportAfterSearch.summary.skillCount,
+          issueCount: exportAfterSearch.summary.issueCount,
+          skillsLen: exportAfterSearch.skills.length,
+          issuesLen: exportAfterSearch.issues.length
+        }, {
+          visible: 1,
+          skillCount: 3,
+          issueCount: 3,
+          skillsLen: 3,
+          issuesLen: 3
+        });
+
+        return {
+          pass: failures.length === 0,
+          failures: failures
+        };
+      }
+
+      function runSelfCheck() {
+        var discovery = runDiscoverySelfCheck();
+        var parser = runParserSelfCheck();
+        var diagnostics = runDiagnosticsSelfCheck();
+        var ui = runUiSelfCheck();
+        return {
+          pass: discovery.pass && parser.pass && diagnostics.pass && ui.pass,
+          discovery: discovery,
+          parser: parser,
+          diagnostics: diagnostics,
+          ui: ui,
+          failures: discovery.failures.concat(parser.failures, diagnostics.failures, ui.failures)
+        };
+      }
+
+      var statusEl = document.getElementById("status");
+      var bannerEl = document.getElementById("banner");
+      var summaryEl = document.getElementById("summary");
+      var skillsSectionEl = document.getElementById("skills-section");
+      var searchFeedbackEl = document.getElementById("search-feedback");
+      var issuesEl = document.getElementById("issues-panel");
+      var skillsEl = document.getElementById("skills-panel");
+      var inputEl = document.getElementById("folder-input");
+      var pickFolderBtn = document.getElementById("pick-folder");
+      var loadDemoBtn = document.getElementById("load-demo");
+      var searchInput = document.getElementById("search-input");
+      var searchClearBtn = document.getElementById("search-clear");
+      var exportBtn = document.getElementById("export-json");
+      var filterInputs = document.querySelectorAll("input[name=\"skill-filter\"]");
+      var currentScan = null;
+      var lastExportText = null;
+      var scanGeneration = 0;
+      var view = createUiView();
+
+      function displayPath(path) {
+        return path === "" ? "." : path;
+      }
+
+      function formatModified(ms) {
+        if (typeof ms !== "number" || !isFinite(ms) || ms <= 0) return "未知";
+        var date = new Date(ms);
+        if (isNaN(date.getTime())) return "未知";
+        try {
+          return date.toLocaleString();
+        } catch (err) {
+          return date.toISOString();
+        }
+      }
+
+      function formatBytes(n) {
+        if (typeof n !== "number" || !isFinite(n) || n < 0) return "0 B";
+        if (n < 1024) return String(n) + " B";
+        if (n < 1024 * 1024) {
+          var kb = n / 1024;
+          return String(kb >= 10 ? Math.round(kb) : Math.round(kb * 10) / 10) + " KB";
+        }
+        var mb = n / (1024 * 1024);
+        return String(mb >= 10 ? Math.round(mb) : Math.round(mb * 10) / 10) + " MB";
+      }
+
+      function formatSimilarity(value) {
+        if (typeof value !== "number" || !isFinite(value)) return "";
+        return Math.round(value * 100) + "%";
+      }
+
+      function skillTitle(skill) {
+        if (!isMissingContent(skill.name)) return skill.name;
+        return displayPath(skill.path);
+      }
+
+      function clearNode(node) {
+        while (node && node.firstChild) node.removeChild(node.firstChild);
+      }
+
+      function addText(parent, tag, className, text) {
+        var node = document.createElement(tag);
+        if (className) node.className = className;
+        node.textContent = text;
+        parent.appendChild(node);
+        return node;
+      }
+
+      function setFilterValue(value) {
+        var i;
+        for (i = 0; i < filterInputs.length; i += 1) {
+          filterInputs[i].checked = filterInputs[i].value === value;
+        }
+      }
+
+      function syncSearchInput() {
+        if (searchInput && searchInput.value !== view.search) {
+          searchInput.value = view.search;
+        }
+      }
+
+      function showErrorState(message) {
+        view.phase = "error";
+        view.scan = null;
+        view.sourceType = null;
+        view.errorMessage = message;
+        currentScan = null;
+        renderApp();
+      }
+
+      function hideResultSections() {
+        summaryEl.hidden = true;
+        skillsSectionEl.hidden = true;
+        searchFeedbackEl.hidden = true;
+        exportBtn.disabled = true;
+        clearNode(bannerEl);
+        clearNode(summaryEl);
+        clearNode(issuesEl);
+        clearNode(skillsEl);
+      }
+
+      function renderApp() {
+        if (!statusEl) return;
+        hideResultSections();
+
+        if (view.phase === "idle") {
+          statusEl.textContent = "尚未选择文件夹。";
+          return;
+        }
+
+        if (view.phase === "scanning") {
+          statusEl.textContent = "正在扫描…";
+          return;
+        }
+
+        if (view.phase === "error") {
+          statusEl.textContent = "扫描失败。";
+          addText(bannerEl, "p", "error", view.errorMessage || "扫描过程中发生错误。");
+          return;
+        }
+
+        var scan = view.scan;
+        var summary = summarizeScan(scan);
+        var rootLabel = view.sourceType === "built-in-demo"
+          ? "内置示例"
+          : (scan && scan.rootName ? "「" + scan.rootName + "」" : "所选文件夹");
+        var skippedNote = scan && scan.skippedCount
+          ? " 有 " + scan.skippedCount + " 个文件因缺少相对路径被忽略。"
+          : "";
+
+        if (view.phase === "empty") {
+          statusEl.textContent = "已查看 " + rootLabel + "。" + skippedNote;
+          if (view.sourceType === "built-in-demo") {
+            addText(bannerEl, "p", "demo-mark", "内置示例");
+          }
+          addText(bannerEl, "p", "empty", "没有找到 SKILL.md");
+          addText(bannerEl, "p", "quiet", "请重新选择一个包含 SKILL.md 的文件夹，或加载内置示例。");
+          return;
+        }
+
+        statusEl.textContent =
+          "已查看 " + rootLabel + "。Skill " + summary.skillCount +
+          " 个，发现问题 " + summary.issueCount + " 个。" + skippedNote;
+
+        if (view.sourceType === "built-in-demo") {
+          addText(bannerEl, "p", "demo-mark", "内置示例");
+        }
+        if (!summary.diagnostics.capabilities.similarDescriptionAvailable) {
+          addText(
+            bannerEl,
+            "p",
+            "note",
+            "当前浏览器不支持描述近似检查；其余检查仍已完成。"
+          );
+        }
+
+        summaryEl.hidden = false;
+        renderSummary(summary);
+        renderIssues(summary);
+        skillsSectionEl.hidden = false;
+        exportBtn.disabled = false;
+        renderSkillsView();
+      }
+
+      function renderSummary(summary) {
+        function item(label, value) {
+          var box = document.createElement("div");
+          box.className = "summary-item";
+          addText(box, "span", "summary-label", label);
+          addText(box, "span", "summary-value", String(value));
+          summaryEl.appendChild(box);
+        }
+        item("Skill", summary.skillCount);
+        item("发现问题", summary.issueCount);
+        item("需复核 Skill", summary.reviewSkillCount);
+        item("正常 Skill", summary.normalSkillCount);
+      }
+
+      function appendPathList(parent, paths) {
+        var list = document.createElement("ul");
+        list.className = "path-list";
+        var i;
+        for (i = 0; i < (paths || []).length; i += 1) {
+          addText(list, "li", "mono", displayPath(paths[i]));
+        }
+        parent.appendChild(list);
+      }
+
+      function addKv(parent, label, value) {
+        var p = document.createElement("p");
+        p.className = "issue-kv";
+        p.appendChild(document.createTextNode(label + "："));
+        var strong = document.createElement("span");
+        strong.className = "mono";
+        strong.textContent = value;
+        p.appendChild(strong);
+        parent.appendChild(p);
+      }
+
+      function renderIssues(summary) {
+        addText(issuesEl, "h2", null, "需复核问题");
+        if (summary.issueCount === 0) {
+          addText(issuesEl, "p", "quiet", "没有发现需要复核的问题。这只表示当前五类检查没有信号，不是内容保证。");
+          return;
+        }
+        var list = document.createElement("ul");
+        list.className = "issue-list";
+        var i;
+        var issue;
+        var item;
+        var title;
+        for (i = 0; i < summary.diagnostics.issues.length; i += 1) {
+          issue = summary.diagnostics.issues[i];
+          item = document.createElement("li");
+          item.className = "issue-card";
+          title = document.createElement("h3");
+          if (issue.type === "similar-description") {
+            title.textContent = issueTypeLabel(issue.type) + " · " + formatSimilarity(issue.similarity);
+          } else {
+            title.textContent = issueTypeLabel(issue.type);
+          }
+          item.appendChild(title);
+          if (issue.type === "missing-field") {
+            addText(item, "p", "issue-path mono", displayPath(issue.path));
+            addText(item, "p", "issue-why", "缺少：" + (issue.fields || []).join("、"));
+          } else if (issue.type === "same-name") {
+            addText(item, "p", "issue-why", "name: " + issue.name);
+            appendPathList(item, issue.paths);
+          } else if (issue.type === "exact-duplicate") {
+            appendPathList(item, issue.paths);
+          } else if (issue.type === "similar-description") {
+            appendPathList(item, issue.paths);
+          } else if (issue.type === "broken-local-link") {
+            addKv(item, "Skill", displayPath(issue.path));
+            addKv(item, "引用", issue.destination);
+            addKv(item, "解析目标", issue.resolvedTarget);
+          } else {
+            appendPathList(item, issue.paths);
+          }
+          list.appendChild(item);
+        }
+        issuesEl.appendChild(list);
+      }
+
+      function renderSkillsView() {
+        var scan = view.scan;
+        var summary = summarizeScan(scan);
+        document.getElementById("count-all").textContent = String(summary.skillCount);
+        document.getElementById("count-review").textContent = String(summary.reviewSkillCount);
+        document.getElementById("count-normal").textContent = String(summary.normalSkillCount);
+        setFilterValue(view.filter);
+        syncSearchInput();
+        clearNode(skillsEl);
+
+        var visible = filterSkills(scan.skills, summary.reviewSet, view.filter, view.search);
+        var query = String(view.search || "").replace(/^\s+|\s+$/g, "");
+        if (visible.length === 0) {
+          searchFeedbackEl.hidden = false;
+          searchFeedbackEl.textContent = "没有匹配的 Skill";
+          return;
+        }
+        if (query) {
+          searchFeedbackEl.hidden = false;
+          searchFeedbackEl.textContent = visible.length + " 个匹配 Skill";
+        } else {
+          searchFeedbackEl.hidden = true;
+          searchFeedbackEl.textContent = "";
+        }
+        var list = document.createElement("div");
+        list.className = "skill-list";
+        var i;
+        for (i = 0; i < visible.length; i += 1) {
+          list.appendChild(renderSkillCard(visible[i], summary));
+        }
+        skillsEl.appendChild(list);
+      }
+
+      function renderSkillCard(skill, summary) {
+        var card = document.createElement("article");
+        card.className = "skill-card";
+        var isReview = summary.reviewSet[skill.path] === true;
+        var head = document.createElement("div");
+        head.className = "card-head";
+        addText(head, "h3", null, skillTitle(skill));
+        var badge = addText(head, "span", isReview ? "badge badge-review" : "badge badge-normal", isReview ? "需复核" : "正常");
+        badge.setAttribute("aria-label", isReview ? "状态：需复核" : "状态：正常");
+        card.appendChild(head);
+
+        if (isMissingContent(skill.description)) {
+          addText(card, "p", "skill-desc placeholder", "未提供 description");
+        } else {
+          addText(card, "p", "skill-desc", skill.description);
+        }
+
+        addText(card, "p", "skill-path", "路径：" + displayPath(skill.path));
+        addText(
+          card,
+          "p",
+          "skill-meta",
+          "文件数 " + skill.fileCount +
+            " · " + formatBytes(skill.totalBytes) +
+            " · 最近文件修改时间 " + formatModified(skill.latestModified)
+        );
+
+        if (skill.readError) {
+          addText(card, "p", "parse-note", "Unable to read SKILL.md");
+        } else if (!skill.frontMatterValid) {
+          addText(card, "p", "parse-note", "Front matter not parsed");
+        }
+
+        if (isReview) {
+          var types = skillIssueTypes(skill.path, summary.diagnostics.issues);
+          var typeList = document.createElement("ul");
+          typeList.className = "type-list";
+          var i;
+          for (i = 0; i < types.length; i += 1) {
+            addText(typeList, "li", null, issueTypeLabel(types[i]));
+          }
+          card.appendChild(typeList);
+        }
+        return card;
+      }
+
+      function loadFromFiles(fileList, sourceType) {
+        var snapshot = Array.prototype.slice.call(fileList || []);
+        var generation = (scanGeneration += 1);
+        resetViewControls(view);
+        syncSearchInput();
+        setFilterValue("all");
+        view.sourceType = sourceType;
+        view.phase = "scanning";
+        view.scan = null;
+        view.errorMessage = null;
+        currentScan = null;
+        lastExportText = null;
+        renderApp();
+
+        try {
+          var scan = discoverFromFiles(snapshot);
+          return parseScanSkills(scan)
+            .then(function () {
+              if (generation !== scanGeneration) return;
+              scan.diagnostics = runDiagnostics(scan);
+              currentScan = scan;
+              setLoadedScan(view, scan, sourceType);
+              renderApp();
+            })
+            .catch(function (err) {
+              if (generation !== scanGeneration) return;
+              console.error("Skill Shelf Check scan failed", err);
+              showErrorState(err && err.message ? err.message : "扫描过程中发生错误。");
+            });
+        } catch (err) {
+          console.error("Skill Shelf Check scan failed", err);
+          showErrorState(err && err.message ? err.message : "扫描过程中发生错误。");
+          return Promise.resolve();
+        }
+      }
+
+      function loadBuiltInDemo() {
+        return loadFromFiles(builtInDemoFiles(), "built-in-demo");
+      }
+
+      function downloadExport() {
+        var report = buildExportReport(view.scan, view.sourceType);
+        if (!report) return;
+        var text = reportJsonText(report);
+        lastExportText = text;
+        var blob = createExportBlob(report);
+        var url = URL.createObjectURL(blob);
+        var link = document.createElement("a");
+        link.href = url;
+        link.download = "skill-shelf-check-report.json";
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        setTimeout(function () {
+          URL.revokeObjectURL(url);
+        }, 0);
+      }
+
+      function handleFolderChange(event) {
+        var list = event.target.files;
+        if (!list || list.length === 0) return;
+        loadFromFiles(list, "local-directory");
+        event.target.value = "";
+      }
+
+      global.SkillShelfDiscovery = {
+        SKILL_FILE_NAME: SKILL_FILE_NAME,
+        normalizePath: normalizePath,
+        basename: basename,
+        dirname: dirname,
+        isSkillFileName: isSkillFileName,
+        inferSelectedRootName: inferSelectedRootName,
+        toScanRelativePath: toScanRelativePath,
+        discoverFromFiles: discoverFromFiles,
+        parseScanSkills: parseScanSkills,
+        runDiscoverySelfCheck: runDiscoverySelfCheck,
+        runSelfCheck: runSelfCheck,
+        runDiagnostics: runDiagnostics,
+        getLastScan: function () {
+          return currentScan;
+        }
+      };
+
+      global.SkillShelfParse = {
+        parseSkillMarkdown: parseSkillMarkdown,
+        runParserSelfCheck: runParserSelfCheck
+      };
+
+      global.SkillShelfDiagnostics = {
+        runDiagnostics: runDiagnostics,
+        tokenizeDescription: tokenizeDescription,
+        jaccardSimilarity: jaccardSimilarity,
+        extractInlineMarkdownLinks: extractInlineMarkdownLinks,
+        joinScanPath: joinScanPath,
+        runDiagnosticsSelfCheck: runDiagnosticsSelfCheck
+      };
+
+      global.SkillShelfUI = {
+        loadFromFiles: loadFromFiles,
+        loadBuiltInDemo: loadBuiltInDemo,
+        buildExportReport: buildExportReport,
+        createExportBlob: createExportBlob,
+        reportJsonText: reportJsonText,
+        summarizeScan: summarizeScan,
+        filterSkills: filterSkills,
+        getView: function () {
+          return view;
+        },
+        getLastExportText: function () {
+          return lastExportText;
+        },
+        downloadExport: downloadExport,
+        runUiSelfCheck: runUiSelfCheck,
+        makeMemoryFile: makeMemoryFile
+      };
+
+      if (pickFolderBtn && inputEl) {
+        pickFolderBtn.addEventListener("click", function () {
+          inputEl.click();
+        });
+      }
+      if (inputEl) {
+        inputEl.addEventListener("change", handleFolderChange);
+      } else {
+        showErrorState("页面缺少目录选择入口。");
+      }
+      if (loadDemoBtn) {
+        loadDemoBtn.addEventListener("click", loadBuiltInDemo);
+      }
+      if (searchInput) {
+        searchInput.addEventListener("input", function () {
+          view.search = searchInput.value;
+          if (view.phase === "results") renderSkillsView();
+        });
+      }
+      if (searchClearBtn) {
+        searchClearBtn.addEventListener("click", function () {
+          view.search = "";
+          syncSearchInput();
+          if (view.phase === "results") renderSkillsView();
+        });
+      }
+      var fi;
+      for (fi = 0; fi < filterInputs.length; fi += 1) {
+        filterInputs[fi].addEventListener("change", function (event) {
+          view.filter = event.target.value;
+          if (view.phase === "results") renderSkillsView();
+        });
+      }
+      if (exportBtn) {
+        exportBtn.addEventListener("click", downloadExport);
+      }
+
+      renderApp();
+    })(window);
+  </script>
+</body>
+</html>
