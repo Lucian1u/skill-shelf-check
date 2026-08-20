@@ -2,7 +2,7 @@
 
 ## Current Phase
 
-v1.0.0 Released / Zero-friction Web Access Complete
+v1.0.0 Released / Public Access & Messaging Complete
 
 `v1.0.0` was published on 2026-08-20.
 
@@ -10,7 +10,7 @@ Public web entry: https://lucian1u.github.io/skill-shelf-check/
 
 ## Current Goal
 
-No further STEPs. The first public version is released, and zero-friction web access is complete.
+No further STEPs. The first public version is released. Public web access and public messaging are complete.
 
 ## Completed
 
@@ -57,6 +57,13 @@ No further STEPs. The first public version is released, and zero-friction web ac
   - STEP 11.5 — Surface the Public Web Entry: **PASS**
   - STEP 11.6 — Final Public Verification & Closeout: **PASS**
   - Public entry: https://lucian1u.github.io/skill-shelf-check/
+- STEP 12 — Public Messaging Consistency Fix & Final Closeout
+  - Completed. **PASS**
+  - Repository Description changed from an offline-only line to online + offline dual-entry wording.
+  - README first screen now presents the Pages URL as a direct use path; offline HTML remains a second official path.
+  - Website / Pages URL unchanged: https://lucian1u.github.io/skill-shelf-check/
+  - Product HTML unchanged.
+  - `v1.0.0` tag and GitHub Release unchanged.
 
 ## In Progress
 
@@ -185,3 +192,9 @@ STEP 11 zero-friction web access:
 - STEP 11.4 enabled GitHub Pages from `main` / root. Public URL: https://lucian1u.github.io/skill-shelf-check/
 - STEP 11.5 surfaced the URL in README and repository Website.
 - STEP 11.6 final public verification: GitHub README and Website enter Pages; root URL opens the tool over HTTPS (`isSecureContext === true`); `fixtures/normal/` 2 Skills / 0 issues; `fixtures/conflict/` 3 Skills / 3 issues (`same-name`, `exact-duplicate`, `broken-local-link`); built-in demo 3 Skills / 2 issues; search, filters, JSON export work; after local fixture selection, 0 additional network requests, no POST / fetch / XHR / beacon / WebSocket, Skill contents not uploaded. Product JS errors: 0. Favicon 404 is a browser request to `https://lucian1u.github.io/favicon.ico`. Offline v1.0.0 Release asset retained. Product SHA-256 unchanged.
+
+STEP 12 public messaging:
+
+- Repository Description no longer reads as offline-only.
+- README first screen states online use first, with a clickable Pages URL; offline HTML remains documented.
+- Website / Pages URL, product HTML, `v1.0.0` tag, and GitHub Release were not changed.

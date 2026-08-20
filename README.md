@@ -1,8 +1,12 @@
 # Skill Shelf Check
 
-一个 zero-install、fully offline、local-first、read-only 的 Agent Skills 可视化诊断工具。
+一个 zero-install、local-first、read-only 的 Agent Skills 可视化诊断工具。可以直接打开网页使用，也可以下载单个 HTML 文件完全离线运行。
 
-分发产物是单个 HTML 文件：[`skill-shelf-check.html`](skill-shelf-check.html)。普通用户下载后可以直接双击打开，选择自己的 Skills 文件夹进行检查。不需要 Node、npm、命令行或本地服务器。
+**[打开 Skill Shelf Check](https://lucian1u.github.io/skill-shelf-check/)**
+
+打开页面后，点击「选择 Skills 文件夹」即可开始。不需要先下载文件，也不需要 Node、npm、命令行或本地服务器。
+
+也可以下载 [`skill-shelf-check.html`](skill-shelf-check.html)，双击后离线使用。
 
 **状态：** Final Acceptance 已通过。当前代码覆盖首个稳定公开版本的范围。具体版本与历史以 [`CHANGELOG.md`](CHANGELOG.md) 和 GitHub Releases 为准。
 
@@ -26,11 +30,11 @@
 
 Skill Shelf Check 是：
 
-- **zero-install** — 双击 HTML 即可使用
-- **fully offline** — 产品代码不依赖外部脚本、字体或 CDN
-- **local-first** — 文件只在当前浏览器页面本地处理
+- **zero-install** — 打开网页即可使用；也可以双击下载的 HTML，无需 Node / npm
+- **local-first** — 用户选择的文件只在当前浏览器页面本地处理
 - **read-only** — 不修改、不删除、不自动修复 Skills
-- **single-file HTML** — 给普通用户的产物就是一个文件
+- **无外部运行时依赖** — 产品代码不依赖外部脚本、字体或 CDN；离线 HTML 可完全离线运行
+- **两种正式入口** — GitHub Pages 在线使用，或单个 HTML 完全离线使用
 
 它扫描用户主动选择的本地 Skills 根目录中所有名为 `SKILL.md` 的文件，用卡片和需复核清单标出值得人工查看的项。
 
@@ -105,6 +109,8 @@ Similar description 不是 AI 语义相似。完整规则见 [`docs/DECISIONS.md
 
 > 文件仅在当前浏览器标签页内处理；本页没有网络请求，也不会修改所选目录。
 
+当通过 GitHub Pages 打开时，页面 HTML 本身会通过 HTTPS 加载。用户选中的 Skill 文件仍只在当前浏览器里处理，不会上传。
+
 这是产品边界，不是额外的安全认证或威胁模型承诺。
 
 ---
@@ -147,7 +153,8 @@ Similar description 的计算是 token-set Jaccard，阈值是 `>= 0.80`。它�
 
 | 路径 | 作用 |
 |---|---|
-| [`skill-shelf-check.html`](skill-shelf-check.html) | 给普通用户的完整产品。CSS 和 JavaScript 都嵌在这个文件里。 |
+| [`skill-shelf-check.html`](skill-shelf-check.html) | 核心产品。CSS 和 JavaScript 都嵌在这个文件里。在线和离线使用都运行这份文件。 |
+| [`index.html`](index.html) | 极薄 Web 入口。把仓库根 URL 转到 `skill-shelf-check.html`。 |
 | [`fixtures/`](fixtures/) | 固定测试输入，不打进分发用的 HTML。 |
 | [`acceptance.md`](acceptance.md) | 正式验收记录：真实跑过的输入、结果和结论。 |
 | [`docs/`](docs/) | 产品规格、状态、路线图和长期决定。 |
@@ -164,7 +171,7 @@ Similar description 的计算是 token-set Jaccard，阈值是 `>= 0.80`。它�
 
 - 没有 build step
 - 没有 runtime dependencies
-- 产品就是这一个 HTML 文件
+- 核心产品仍是 [`skill-shelf-check.html`](skill-shelf-check.html)；[`index.html`](index.html) 只是根网址的极薄跳转入口
 - [`fixtures/`](fixtures/) 用来固定测试输入；不要为了让实现“通过”而改 fixtures
 - 正式验收记录见 [`acceptance.md`](acceptance.md)
 
