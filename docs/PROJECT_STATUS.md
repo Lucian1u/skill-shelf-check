@@ -2,15 +2,13 @@
 
 ## Current Phase
 
-v1.0.0 Released / Public Access & Messaging Complete
+v1.0.1 Patch Release Preparation
 
-`v1.0.0` was published on 2026-08-20.
-
-Public web entry: https://lucian1u.github.io/skill-shelf-check/
+`v1.0.0` remains published and immutable. Public web entry: https://lucian1u.github.io/skill-shelf-check/
 
 ## Current Goal
 
-No further STEPs. The first public version is released. Public web access and public messaging are complete.
+Prepare a new v1.0.1 patch release to publish the verified privacy-copy fix. The existing v1.0.0 remains immutable.
 
 ## Completed
 
@@ -64,6 +62,16 @@ No further STEPs. The first public version is released. Public web access and pu
   - Website / Pages URL unchanged: https://lucian1u.github.io/skill-shelf-check/
   - Product HTML unchanged.
   - `v1.0.0` tag and GitHub Release unchanged.
+- STEP 13 — Hosted/Offline Privacy Copy Consistency & Patch Release
+  - STEP 13.1 — Privacy Copy Web/Offline Consistency Fix: **PASS**
+  - STEP 13.2 — v1.0.1 Patch Release Preparation: **PASS**
+  - STEP 13.3 — Not Started
+  - Product HTML privacy copy no longer claims the page itself makes no network requests.
+  - Selected Skill files stay in the current browser tab, are not uploaded, and are not modified.
+  - Old v1.0.0 product SHA-256: `2900908ccd948a023ad22c407edd75851a1cf9a3563ab25e97c0ae0b76650e83`
+  - New candidate product SHA-256: `85d569dc889bb618d10185fa68a1a241289566f7a77568a1cce5aa575002f450`
+  - `v1.0.0` tag and GitHub Release unchanged.
+  - Pages URL unchanged: https://lucian1u.github.io/skill-shelf-check/
 
 ## In Progress
 
@@ -71,7 +79,7 @@ No further STEPs. The first public version is released. Public web access and pu
 
 ## Not Started
 
-- None.
+- STEP 13.3 — v1.0.1 Tag & GitHub Release.
 
 ## v1.0.0
 

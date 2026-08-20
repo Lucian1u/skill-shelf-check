@@ -4,6 +4,16 @@ All notable changes to this project will be documented here.
 
 ## Unreleased
 
+### Added
+
+- Added a zero-friction GitHub Pages web entry while retaining the single-file offline HTML distribution.
+- Added direct web access links in the repository README and Website metadata.
+
+### Fixed
+
+- Clarified privacy copy so the hosted page no longer claims that the page itself makes no network requests.
+- Clarified that selected Skill files stay in the browser, are not uploaded, and are not modified.
+
 ## 1.0.0 - 2026-08-20
 
 ### Added
